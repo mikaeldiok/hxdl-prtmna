@@ -4,5 +4,6 @@
     "Comment": false,
     "Core": true,
     "School": false,
-    "Vehicle": true
+    "Vehicle": true,
+    "Trip": true
 }

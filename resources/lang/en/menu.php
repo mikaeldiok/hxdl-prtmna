@@ -5,34 +5,11 @@ return [
     'registrants'           => 'Registrants',
     'message_trackers'      => 'Message Trackers',
 
-    'finance' => [
-        'title'             => 'Finance',
-        'installments'      => 'Installments',
-    ],
-
-    'core' => [
-        'title'             => 'Core Data',
-        'paths'             => 'Paths',
-        'periods'           => 'Periods',
-        'units'             => 'Units',
-        'tiers'             => 'Tiers',
-    ],
-
-    'school' => [
-        'title'             => 'School',
-        'students'          => 'Students',
+    'vehicle' => [
+        'title'             => 'Vehicle',
+        'tankers'           => 'Tankers',
     ],
     
-    'benefactor' => [
-        'title'             => 'Benefactor',
-        'donators'           => 'Donator',
-        'commitments'          => 'Commitment',
-    ],
-
-    'fund' => [
-        'title'             => 'Fund',
-        'donations'           => 'Donation',
-    ],
 
     'blog' => [
         'title'             => 'Blog',

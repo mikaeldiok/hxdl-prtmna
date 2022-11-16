@@ -5,34 +5,9 @@ return [
     'registrants'           => 'Pendaftar',
     'message_trackers'      => 'Lacak Pesan',
 
-    'finance' => [
-        'title'             => 'Keuangan',
-        'installments'      => 'Angsuran',
-    ],
-
-    'core' => [
-        'title'             => 'Data Inti',
-        'paths'             => 'Jalur Pendaftaran',
-        'periods'           => 'Periode',
-        'units'             => 'Unit',
-        'tiers'             => 'Kelas / Jurusan',
-    ],
-
-    'school' => [
-        'title'             => 'Sekolah',
-        'students'          => 'Siswa',
-        'cores'             => 'Data Sekolah',
-    ],
-
-    'benefactor' => [
-        'title'             => 'Donatur',
-        'donators'          => 'Donatur',
-        'commitments'        => 'Komitmen',
-    ],
-
-    'fund' => [
-        'title'             => 'Dana',
-        'donations'           => 'Donasi',
+    'vehicle' => [
+        'title'             => 'Kendaraan',
+        'tankers'           => 'Mobil Tangki',
     ],
 
     'blog' => [

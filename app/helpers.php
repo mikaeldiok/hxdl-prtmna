@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 /*
  * Global helpers file with misc functions.
@@ -15,6 +16,36 @@ if (!function_exists('app_name')) {
     function app_name()
     {
         return config('app.name');
+    }
+}
+
+/*
+ * Global helpers file with misc functions.
+ */
+if (!function_exists('convert_slash_to_basic_date')) {
+    /**
+     * Helper to grab the application name.
+     *
+     * @return mixed
+     */
+    function convert_slash_to_basic_date($date)
+    {
+        return  Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d'); 
+    }
+}
+
+/*
+ * Global helpers file with misc functions.
+ */
+if (!function_exists('convert_basic_to_slash_date')) {
+    /**
+     * Helper to grab the application name.
+     *
+     * @return mixed
+     */
+    function convert_basic_to_slash_date($date)
+    {
+        return  Carbon::createFromFormat('Y-m-d', $date)->format('d/m/Y'); 
     }
 }
 
