@@ -36,11 +36,6 @@ return [
     */
 
     'guards' => [
-        'donator' => [
-            'redirectTo' => 'benefactor::frontend.donators.index',
-            'driver'     => 'session',
-            'provider'   => 'donators',
-        ],
 
         'web' => [
             'driver'   => 'session',
@@ -82,10 +77,6 @@ return [
         //     'table' => 'users',
         // ],
 
-        'donators' => [
-            'driver' => 'eloquent',
-            'model' => Modules\Benefactor\Entities\Donator::class,
-        ],
     ],
 
     /*

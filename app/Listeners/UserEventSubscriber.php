@@ -12,11 +12,6 @@ class UserEventSubscriber
      */
     public function handleUserLogin($event)
     {
-        if(\Auth::guard('donator')->check()){
-            $user = $event->user;
-
-            Log::debug('Login Success: '.$user->user->name.', IP:'.request()->getClientIp());
-        }else{
             try {
                 $user = $event->user;
                 $user_profile = $user->userprofile;
@@ -33,7 +28,6 @@ class UserEventSubscriber
             }
     
             Log::debug('Login Success: '.$user->name.', IP:'.request()->getClientIp());
-        }
     }
 
     /**
