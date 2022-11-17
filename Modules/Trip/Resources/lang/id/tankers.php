@@ -3,7 +3,7 @@
 return [
 
     'name'                      => 'Nama',
-    'tanker_id'                => 'NIS/NIM',
+    'inspection_id'                => 'NIS/NIM',
     'gender'                    => 'Jenis Kelamin',
     'birth_place'               => 'Tempat Lahir',
     'birth_date'                => 'Tanggal Lahir',

@@ -17,41 +17,36 @@
         <div class="row">
             <div class="col-8">
                 <h4 class="card-title mb-0">
-                    <i class="{{ $module_icon }}"></i>  {{ $module_title }} <small class="text-muted">{{ __($module_action) }}</small>
+                    <i class="{{ $module_icon }}"></i> {{ $module_title }} <small class="text-muted">{{ __($module_action) }}</small>
                 </h4>
                 <div class="small text-muted">
                     @lang(":module_name Management Dashboard", ['module_name'=>Str::title($module_name)])
                 </div>
             </div>
             <!--/.col-->
+            <div class="col-4">
+                <div class="float-right">
+                    <a href="{{ route("backend.$module_name.index") }}" class="btn btn-secondary mt-1 btn-sm" data-toggle="tooltip" title="{{ ucwords($module_name) }} List"><i class="fas fa-list"></i> List</a>
+                    @can('edit_'.$module_name)
+                    <a href="{{ route("backend.$module_name.edit", $$module_name_singular) }}" class="btn btn-primary mt-1 btn-sm" data-toggle="tooltip" title="Edit {{ Str::singular($module_name) }} "><i class="fas fa-wrench"></i> Edit</a>
+                    @endcan
+                </div>
+            </div>
+            <!--/.col-->
         </div>
         <!--/.row-->
 
-        <hr>
 
-        <div class="row mt-4">
-            <div class="col">
-                {{ html()->modelForm($$module_name_singular, 'PATCH', route("backend.$module_name.update", $$module_name_singular))->class('form')->attributes(['enctype'=>"multipart/form-data"])->open() }}
+        <!-- Tab panes -->
 
-                @include ("vehicle::backend.$module_name.form")
-                <div class="row">
-                    <div class="col-4">
-                        <div class="form-group">
-                            {{ html()->submit($text = icon('fas fa-save')." Save")->class('btn btn-success') }}
-                        </div>
-                    </div>
+        <div class="mt-4">
+            <hr>
+                @include('backend.includes.show')
 
-                    <div class="col-8">
-                        <div class="float-right">
-                            <a href="{{ route("backend.$module_name.index") }}" class="btn btn-warning" data-toggle="tooltip" title="{{__('labels.backend.cancel')}}"><i class="fas fa-reply"></i> Cancel</a>
-                        </div>
-                    </div>
-                </div>
-
-                {{ html()->form()->close() }}
-
+                <hr>
+                    @include('trip::backend.includes.activitylog')
+                <hr>
             </div>
-        </div>
     </div>
 
     <div class="card-footer">
@@ -67,9 +62,3 @@
 </div>
 
 @stop
-
-@push ('after-scripts')
-
-@include('backend.includes.ajax-delete-swal')
-
-@endpush

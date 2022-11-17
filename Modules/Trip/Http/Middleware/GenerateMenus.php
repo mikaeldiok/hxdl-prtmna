@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Vehicle\Http\Middleware;
+namespace Modules\Trip\Http\Middleware;
 
 use Closure;
 
@@ -17,42 +17,30 @@ class GenerateMenus
     public function handle($request, Closure $next)
     {
         \Menu::make('admin_sidebar', function ($menu) {
-            //vehicle menu
+            //trip menu
 
             // Separator: Donasi
-            $menu->add('Kendaraan', [
+            $menu->add('Pre Trip Insepction', [
                 'class' => 'c-sidebar-nav-title',
             ])
             ->data([
-                'order'         => 2,
-                'permission'    => ['view_tankers'],
+                'order'         => 4,
+                'permission'    => ['view_inspections'],
             ]);
 
-            $menu->add('<i class="fas fa-graduation-cap c-sidebar-nav-icon"></i> '.trans('menu.vehicle.tankers'), [
-                'route' => 'backend.tankers.index',
+            $menu->add('<i class="fas fa-graduation-cap c-sidebar-nav-icon"></i> '.trans('menu.trip.inspections'), [
+                'route' => 'backend.inspections.index',
                 'class' => 'c-sidebar-nav-item',
             ])
             ->data([
-                'order' => 3,
-                'activematches' => ['admin/tankers*'],
-                'permission' => ['view_tankers'],
+                'order' => 5,
+                'activematches' => ['admin/inspections*'],
+                'permission' => ['view_inspections'],
             ])
             ->link->attr([
                 'class' => 'c-sidebar-nav-link',
             ]);
 
-            $menu->add('<i class="fas fa-vehicle c-sidebar-nav-icon"></i> '.trans('menu.vehicle.cores'), [
-                'route' => 'backend.cores.index',
-                'class' => 'c-sidebar-nav-item',
-            ])
-            ->data([
-                'order' => 4,
-                'activematches' => ['admin/cores*'],
-                'permission' => ['view_cores'],
-            ])
-            ->link->attr([
-                'class' => 'c-sidebar-nav-link',
-            ]);
         })->sortBy('order');
 
         return $next($request);

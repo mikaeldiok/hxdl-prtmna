@@ -1,21 +1,21 @@
 <?php
 
-namespace Modules\Vehicle\Providers;
+namespace Modules\Trip\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 
-class VehicleServiceProvider extends ServiceProvider
+class TripServiceProvider extends ServiceProvider
 {
     /**
      * @var string $moduleName
      */
-    protected $moduleName = 'Vehicle';
+    protected $moduleName = 'Trip';
 
     /**
      * @var string $moduleNameLower
      */
-    protected $moduleNameLower = 'vehicle';
+    protected $moduleNameLower = 'trip';
 
     /**
      * Boot the application events.
@@ -31,7 +31,7 @@ class VehicleServiceProvider extends ServiceProvider
 
         // adding global middleware
         $kernel = $this->app->make('Illuminate\Contracts\Http\Kernel');
-        $kernel->pushMiddleware('Modules\Vehicle\Http\Middleware\GenerateMenus');
+        $kernel->pushMiddleware('Modules\Trip\Http\Middleware\GenerateMenus');
     }
 
     /**

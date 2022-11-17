@@ -2,31 +2,31 @@
   <tbody>
       <tr>
           <td class="font-weight-bold">ID </td>
-          <td>: {{$tanker->tanker_id}}</td>
+          <td>: {{$inspection->inspection_id}}</td>
       </tr>
       <tr>
           <td class="font-weight-bold">Gender </td>
-          <td>: {{$tanker->gender}}</td>
+          <td>: {{$inspection->gender}}</td>
       </tr>
       <tr>
           <td class="font-weight-bold">Agama </td>
-          <td>: {{$tanker->religion}}</td>
+          <td>: {{$inspection->religion}}</td>
       </tr>
       <tr>
           <td class="font-weight-bold">TB </td>
-          <td>: {{$tanker->height}} cm</td>
+          <td>: {{$inspection->height}} cm</td>
       </tr>
       <tr>
           <td class="font-weight-bold">BB </td>
-          <td>: {{$tanker->weight}} kg</td>
+          <td>: {{$inspection->weight}} kg</td>
       </tr>
       <!-- <tr>
           <td class="font-weight-bold">Skill </td>
-          <td>: {{$tanker->skills}}</td>
+          <td>: {{$inspection->skills}}</td>
       </tr>
       <tr>
           <td class="font-weight-bold">Certificate </td>
-          <td>: {{$tanker->certificate}}</td>
+          <td>: {{$inspection->certificate}}</td>
       </tr> -->
   </tbody>
 </table>

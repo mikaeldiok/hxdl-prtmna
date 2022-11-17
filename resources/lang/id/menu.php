@@ -10,6 +10,11 @@ return [
         'tankers'           => 'Mobil Tangki',
     ],
 
+    'trip' => [
+        'title'             => 'Pre Trip Insepction',
+        'inspections'       => 'Inspection',
+    ],
+
     'blog' => [
         'title'             => 'Blog',
         'posts'             => 'Artikel',

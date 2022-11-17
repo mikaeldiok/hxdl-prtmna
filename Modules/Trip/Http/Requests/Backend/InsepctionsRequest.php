@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Vehicle\Http\Requests\Frontend;
+namespace Modules\Trip\Http\Requests\Backend;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TankersRequest extends FormRequest
+class InspectionsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

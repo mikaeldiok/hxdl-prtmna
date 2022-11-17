@@ -50,7 +50,7 @@
                         </div>
                         @endif
 
-                        <form role="form" method="POST" action="{{ route('auth.tankers.login') }}">
+                        <form role="form" method="POST" action="{{ route('auth.inspections.login') }}">
                             @csrf
 
                             <!-- redirectTo URL -->
@@ -61,7 +61,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                     </div>
-                                    <input type="email" class="form-control" id="tanker_email" name="tanker_email" value="{{ old('tanker_email') }}" placeholder="{{ __('E-Mail Address') }}" aria-label="email" aria-describedby="input-email" required>
+                                    <input type="email" class="form-control" id="inspection_email" name="inspection_email" value="{{ old('inspection_email') }}" placeholder="{{ __('E-Mail Address') }}" aria-label="email" aria-describedby="input-email" required>
                                 </div>
                             </div>
                             <div class="form-group">

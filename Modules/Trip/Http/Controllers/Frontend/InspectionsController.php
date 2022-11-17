@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Vehicle\Http\Controllers\Frontend;
+namespace Modules\Trip\Http\Controllers\Frontend;
 
 use App\Authorizable;
 use App\Http\Controllers\Controller;
@@ -9,35 +9,35 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Log;
 use Auth;
-use Modules\Vehicle\Services\TankerService;
+use Modules\Trip\Services\InspectionService;
 use Spatie\Activitylog\Models\Activity;
 
-class TankersController extends Controller
+class InspectionsController extends Controller
 {
-    protected $tankerService;
+    protected $inspectionService;
 
-    public function __construct(TankerService $tankerService)
+    public function __construct(InspectionService $inspectionService)
     {
         // Page Title
-        $this->module_title = trans('menu.vehicle.tankers');
+        $this->module_title = trans('menu.trip.inspections');
 
         // module name
-        $this->module_name = 'tankers';
+        $this->module_name = 'inspections';
 
         // directory path of the module
-        $this->module_path = 'tankers';
+        $this->module_path = 'inspections';
 
         // module icon
         $this->module_icon = 'fas fa-user-tie';
 
         // module model name, path
-        $this->module_model = "Modules\Tanker\Entities\Tanker";
+        $this->module_model = "Modules\Inspection\Entities\Inspection";
 
-        $this->tankerService = $tankerService;
+        $this->inspectionService = $inspectionService;
     }
 
     /**
-     * Go to tanker homepage
+     * Go to inspection homepage
      *
      * @param Request $request
      * @param int     $id
@@ -55,21 +55,21 @@ class TankersController extends Controller
 
         $module_action = 'Index';
 
-        $tankers = $this->tankerService->getAllTankers()->data;
+        $inspections = $this->inspectionService->getAllInspections()->data;
 
         //determine connections
         $connection = config('database.default');
         $driver = config("database.connections.{$connection}.driver");
        
         return view(
-            "vehicle::frontend.$module_name.index",
-            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "tankers",'driver')
+            "trip::frontend.$module_name.index",
+            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "inspections",'driver')
         );
     }
 
 
     /**
-     * Go to tanker catalog
+     * Go to inspection catalog
      *
      * @param Request $request
      * @param int     $id
@@ -87,10 +87,10 @@ class TankersController extends Controller
 
         $module_action = 'Index';
 
-        $tankers = $this->tankerService->getPaginatedTankers(20,$request)->data;
+        $inspections = $this->inspectionService->getPaginatedInspections(20,$request)->data;
         
         if ($request->ajax()) {
-            return view("vehicle::frontend.$module_name.tankers-card-loader", ['tankers' => $tankers])->render();  
+            return view("trip::frontend.$module_name.inspections-card-loader", ['inspections' => $inspections])->render();  
         }
         
         //determine connections
@@ -98,20 +98,20 @@ class TankersController extends Controller
         $driver = config("database.connections.{$connection}.driver");
        
         return view(
-            "vehicle::frontend.$module_name.index",
-            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "tankers",'driver')
+            "trip::frontend.$module_name.index",
+            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "inspections",'driver')
         );
     }
 
     /**
-     * Go to tanker catalog
+     * Go to inspection catalog
      *
      * @param Request $request
      * @param int     $id
      *
      * @return Response
      */
-    public function filterTankers(Request $request)
+    public function filterInspections(Request $request)
     {
         $module_title = $this->module_title;
         $module_name = $this->module_name;
@@ -122,24 +122,24 @@ class TankersController extends Controller
 
         $module_action = 'Index';
 
-        $tankers = $this->tankerService->filterTankers(20,$request)->data;
+        $inspections = $this->inspectionService->filterInspections(20,$request)->data;
         
         if ($request->ajax()) {
-            return view("vehicle::frontend.$module_name.tankers-card-loader", ['tankers' => $tankers])->render();  
+            return view("trip::frontend.$module_name.inspections-card-loader", ['inspections' => $inspections])->render();  
         }
         
     }
 
 
     /**
-     * Show tanker details
+     * Show inspection details
      *
      * @param Request $request
      * @param int     $id
      *
      * @return Response
      */
-    public function show($id,$tankerId)
+    public function show($id,$inspectionId)
     {
         $module_title = $this->module_title;
         $module_name = $this->module_name;
@@ -150,7 +150,7 @@ class TankersController extends Controller
 
         $module_action = 'Index';
 
-        $tanker = $this->tankerService->show($id)->data;
+        $inspection = $this->inspectionService->show($id)->data;
         
         
         //determine connections
@@ -158,8 +158,8 @@ class TankersController extends Controller
         $driver = config("database.connections.{$connection}.driver");
        
         return view(
-            "vehicle::frontend.$module_name.show",
-            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "tanker",'driver')
+            "trip::frontend.$module_name.show",
+            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "inspection",'driver')
         );
     }
 }

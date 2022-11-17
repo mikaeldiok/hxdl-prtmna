@@ -3,7 +3,7 @@
 return [
 
     'name'                      => 'Nama',
-    'tanker_id'                => 'Tanker ID',
+    'inspection_id'                => 'Inspection ID',
     'gender'                    => 'Gender',
     'birth_place'               => 'Birth Place',
     'birth_date'                => 'Birth Date',

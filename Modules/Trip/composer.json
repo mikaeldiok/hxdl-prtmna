@@ -1,5 +1,5 @@
 {
-    "name": "mikaeldiok/vehicle",
+    "name": "mikaeldiok/trip",
     "description": "",
     "authors": [
         {
@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Modules\\Vehicle\\": ""
+            "Modules\\Trip\\": ""
         }
     }
 }

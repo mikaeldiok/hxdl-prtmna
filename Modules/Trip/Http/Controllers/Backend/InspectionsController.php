@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Vehicle\Http\Controllers\Backend;
+namespace Modules\Trip\Http\Controllers\Backend;
 
 use App\Authorizable;
 use App\Http\Controllers\Controller;
@@ -11,36 +11,36 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Log;
-use Modules\Vehicle\Services\TankerService;
-use Modules\Vehicle\DataTables\TankersDataTable;
-use Modules\Vehicle\Http\Requests\Backend\TankersRequest;
+use Modules\Trip\Services\InspectionService;
+use Modules\Trip\DataTables\InspectionsDataTable;
+use Modules\Trip\Http\Requests\Backend\InspectionsRequest;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\DataTables\DataTables;
 
-class TankersController extends Controller
+class InspectionsController extends Controller
 {
     use Authorizable;
 
-    protected $tankerService;
+    protected $inspectionService;
 
-    public function __construct(TankerService $tankerService)
+    public function __construct(InspectionService $inspectionService)
     {
         // Page Title
-        $this->module_title = trans('menu.vehicle.tankers');
+        $this->module_title = trans('menu.trip.inspections');
 
         // module name
-        $this->module_name = 'tankers';
+        $this->module_name = 'inspections';
 
         // directory path of the module
-        $this->module_path = 'tankers';
+        $this->module_path = 'inspections';
 
         // module icon
         $this->module_icon = 'fas fa-graduation-cap';
 
         // module model name, path
-        $this->module_model = "Modules\Vehicle\Entities\Tanker";
+        $this->module_model = "Modules\Trip\Entities\Inspection";
 
-        $this->tankerService = $tankerService;
+        $this->inspectionService = $inspectionService;
     }
 
     /**
@@ -48,7 +48,7 @@ class TankersController extends Controller
      *
      * @return Response
      */
-    public function index(TankersDataTable $dataTable)
+    public function index(InspectionsDataTable $dataTable)
     {
         $module_title = $this->module_title;
         $module_name = $this->module_name;
@@ -61,7 +61,7 @@ class TankersController extends Controller
 
         $$module_name = $module_model::paginate();
 
-        return $dataTable->render("vehicle::backend.$module_path.index",
+        return $dataTable->render("trip::backend.$module_path.index",
             compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action')
         );
     }
@@ -84,7 +84,7 @@ class TankersController extends Controller
 
         $$module_name = [];
 
-        $$module_name = $this->tankerService->getIndexList($request);
+        $$module_name = $this->inspectionService->getIndexList($request);
 
         return response()->json($$module_name);
     }
@@ -105,10 +105,10 @@ class TankersController extends Controller
 
         $module_action = 'Create';
 
-        $options = $this->tankerService->create()->data;
+        $options = $this->inspectionService->create()->data;
 
         return view(
-            "vehicle::backend.$module_name.create",
+            "trip::backend.$module_name.create",
             compact('module_title', 'module_name', 'module_icon', 'module_action', 'module_name_singular','options')
         );
     }
@@ -120,7 +120,7 @@ class TankersController extends Controller
      *
      * @return Response
      */
-    public function store(TankersRequest $request)
+    public function store(InspectionsRequest $request)
     {
         $module_title = $this->module_title;
         $module_name = $this->module_name;
@@ -131,11 +131,11 @@ class TankersController extends Controller
 
         $module_action = 'Store';
 
-        $tankers = $this->tankerService->store($request);
+        $inspections = $this->inspectionService->store($request);
 
-        $$module_name_singular = $tankers->data;
+        $$module_name_singular = $inspections->data;
 
-        if(!$tankers->error){
+        if(!$inspections->error){
             Flash::success('<i class="fas fa-check"></i> '.label_case($module_name_singular).' Data Added Successfully!')->important();
         }else{
             Flash::error("<i class='fas fa-times-circle'></i> Error When ".$module_action." '".Str::singular($module_title)."'")->important();
@@ -162,9 +162,9 @@ class TankersController extends Controller
 
         $module_action = 'Show';
 
-        $tankers = $this->tankerService->show($id);
+        $inspections = $this->inspectionService->show($id);
 
-        $$module_name_singular = $tankers->data;
+        $$module_name_singular = $inspections->data;
 
         //determine connections
         $connection = config('database.default');
@@ -177,7 +177,7 @@ class TankersController extends Controller
             ->paginate();
 
         return view(
-            "vehicle::backend.$module_name.show",
+            "trip::backend.$module_name.show",
             compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "$module_name_singular",'activities','driver')
         );
     }
@@ -200,12 +200,12 @@ class TankersController extends Controller
 
         $module_action = 'Edit';
 
-        $tankers = $this->tankerService->edit($id);
+        $inspections = $this->inspectionService->edit($id);
 
-        $$module_name_singular = $tankers->data;
+        $$module_name_singular = $inspections->data;
         
         return view(
-            "vehicle::backend.$module_name.edit",
+            "trip::backend.$module_name.edit",
             compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "$module_name_singular")
         );
     }
@@ -218,7 +218,7 @@ class TankersController extends Controller
      *
      * @return Response
      */
-    public function update(TankersRequest $request, $id)
+    public function update(InspectionsRequest $request, $id)
     {
         $module_title = $this->module_title;
         $module_name = $this->module_name;
@@ -233,11 +233,11 @@ class TankersController extends Controller
             'photo'    => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         
-        $tankers = $this->tankerService->update($request,$id);
+        $inspections = $this->inspectionService->update($request,$id);
 
-        $$module_name_singular = $tankers->data;
+        $$module_name_singular = $inspections->data;
 
-        if(!$tankers->error){
+        if(!$inspections->error){
             Flash::success('<i class="fas fa-check"></i> '.label_case($module_name_singular).' Data Updated Successfully!')->important();
         }else{
             Flash::error("<i class='fas fa-times-circle'></i> Error When ".$module_action." '".Str::singular($module_title)."'")->important();
@@ -264,11 +264,11 @@ class TankersController extends Controller
 
         $module_action = 'destroy';
 
-        $tankers = $this->tankerService->destroy($id);
+        $inspections = $this->inspectionService->destroy($id);
 
-        $$module_name_singular = $tankers->data;
+        $$module_name_singular = $inspections->data;
 
-        if(!$tankers->error){
+        if(!$inspections->error){
             Flash::success('<i class="fas fa-check"></i> '.label_case($module_name_singular).' Data Deleted Successfully!')->important();
         }else{
             Flash::error("<i class='fas fa-times-circle'></i> Error When ".$module_action." '".Str::singular($module_title)."'")->important();
@@ -296,11 +296,11 @@ class TankersController extends Controller
 
         $module_action = 'purge';
 
-        $tankers = $this->tankerService->purge($id);
+        $inspections = $this->inspectionService->purge($id);
 
-        $$module_name_singular = $tankers->data;
+        $$module_name_singular = $inspections->data;
 
-        if(!$tankers->error){
+        if(!$inspections->error){
             Flash::success('<i class="fas fa-check"></i> '.label_case($module_name_singular).' Data Deleted Successfully!')->important();
         }else{
             Flash::error("<i class='fas fa-times-circle'></i> Error When ".$module_action." '".Str::singular($module_title)."'")->important();
@@ -326,12 +326,12 @@ class TankersController extends Controller
 
         $module_action = 'Trash List';
 
-        $tankers = $this->tankerService->trashed();
+        $inspections = $this->inspectionService->trashed();
 
-        $$module_name = $tankers->data;
+        $$module_name = $inspections->data;
 
         return view(
-            "vehicle::backend.$module_name.trash",
+            "trip::backend.$module_name.trash",
             compact('module_title', 'module_name', "$module_name", 'module_icon', 'module_name_singular', 'module_action')
         );
     }
@@ -355,11 +355,11 @@ class TankersController extends Controller
 
         $module_action = 'Restore';
 
-        $tankers = $this->tankerService->restore($id);
+        $inspections = $this->inspectionService->restore($id);
 
-        $$module_name_singular = $tankers->data;
+        $$module_name_singular = $inspections->data;
 
-        if(!$tankers->error){
+        if(!$inspections->error){
             Flash::success('<i class="fas fa-check"></i> '.label_case($module_name_singular).' Data Restored Successfully!')->important();
         }else{
             Flash::error("<i class='fas fa-times-circle'></i> Error When ".$module_action." '".Str::singular($module_title)."'")->important();
@@ -393,11 +393,11 @@ class TankersController extends Controller
 
         $module_action = 'Import';
         
-        $tankers = $this->tankerService->import($request);
+        $inspections = $this->inspectionService->import($request);
 
-        $import = $tankers->data;
+        $import = $inspections->data;
 
-        if(!$tankers->error){
+        if(!$inspections->error){
             Flash::success('<i class="fas fa-check"></i> '.label_case($module_name_singular).' Data Restored Successfully!')->important();
         }else{
             Flash::error("<i class='fas fa-times-circle'></i> Error When ".$module_action." '".Str::singular($module_title)."'")->important();
@@ -407,11 +407,11 @@ class TankersController extends Controller
     }
 
     /**
-     * FOr getting tanker data via ajax
+     * FOr getting inspection data via ajax
      *
      * @return Response
      */
-    public function get_tanker(Request $request)
+    public function get_inspection(Request $request)
     {
         $module_title = $this->module_title;
         $module_name = $this->module_name;
@@ -422,7 +422,7 @@ class TankersController extends Controller
 
         $module_action = 'List';
 
-        $response = $this->tankerService->get_tanker($request);
+        $response = $this->inspectionService->get_inspection($request);
 
         return response()->json($response);
     }

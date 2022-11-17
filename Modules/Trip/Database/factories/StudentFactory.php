@@ -1,21 +1,21 @@
 <?php
-namespace Modules\Vehicle\Database\factories;
+namespace Modules\Trip\Database\factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminte\Support\Str;
 use Illuminate\Support\Arr; 
 use Carbon\Carbon;
 
-use Modules\Vehicle\Entities\Core;
+use Modules\Trip\Entities\Core;
 
-class TankerFactory extends Factory
+class InspectionFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = \Modules\Vehicle\Entities\Tanker::class;
+    protected $model = \Modules\Trip\Entities\Inspection::class;
 
     /**
      * Define the model's default state.
@@ -45,7 +45,7 @@ class TankerFactory extends Factory
 
         return [
             'name'          => $this->faker->name,
-            'tanker_id'    => mt_rand(1111111,9999999),
+            'inspection_id'    => mt_rand(1111111,9999999),
             'gender'        => Arr::random(["Laki-laki","Perempuan"]),
             'birth_place'   => $this->faker->country,
             'birth_date'    => $this->faker->dateTimeBetween(),

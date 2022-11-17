@@ -1,4 +1,4 @@
-@extends('vehicle::frontend.layouts.app')
+@extends('trip::frontend.layouts.app')
 
 @section('title') {{ __("Donatur") }} @endsection
 
@@ -14,7 +14,7 @@
                         @csrf
 
                         {{ method_field('POST') }}
-                        @include('vehicle::frontend.tankers.filter-form')
+                        @include('trip::frontend.inspections.filter-form')
                         <button type="submit" class="btn btn-primary" id="submit">Submit</button>
                         <button class="btn btn-danger-o" id="clearFilter"><i class="fa fa-times"></i>Clear Filter</button>
                     </form>
@@ -24,9 +24,9 @@
         <div class="col-lg-9 mb-5">
             <div class="card bg-white border-light shadow flex-md-row no-gutters p-4">
                 <div class="card-body d-flex flex-column justify-content-between col-auto py-4 px-2">
-                    @if (count($tankers) > 0)
-                        <section id="tankers">
-                            @include('vehicle::frontend.tankers.tankers-card-loader')
+                    @if (count($inspections) > 0)
+                        <section id="inspections">
+                            @include('trip::frontend.inspections.inspections-card-loader')
                         </section>
                     @endif
                 </div>
@@ -47,8 +47,8 @@
         $('body').on('click', '.pagination a', function(e) {
             e.preventDefault();
 
-            $('#tankers a').css('color', '#dfecf6');
-            $('#tankers').append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="/images/loading.gif" />');
+            $('#inspections a').css('color', '#dfecf6');
+            $('#inspections').append('<img style="position: absolute; left: 0; top: 0; z-index: 100000;" src="/images/loading.gif" />');
 
             var url = $(this).attr('href');  
             getArticles(url);
@@ -59,9 +59,9 @@
             $.ajax({
                 url : url  
             }).done(function (data) {
-                $('#tankers').html(data);  
+                $('#inspections').html(data);  
             }).fail(function () {
-                alert('Tankers could not be loaded.');
+                alert('Inspections could not be loaded.');
             });
         }
     });
@@ -71,7 +71,7 @@
             e.preventDefault();
 
             $.ajax({
-                url: "{{route('frontend.tankers.filterTankers')}}",
+                url: "{{route('frontend.inspections.filterInspections')}}",
                 type: "GET",
                 data: null,
                 success: function(response) {
@@ -85,7 +85,7 @@
 
                     $('#year_class').multiselect('refresh');
 
-                    $('#tankers').html(response);  
+                    $('#inspections').html(response);  
                 }
             });
         });
@@ -133,7 +133,7 @@
                 // $('#submit').html('Please Wait...');
                 // $("#submit").attr("disabled", true);
                 $.ajax({
-                    url: "{{route('frontend.tankers.filterTankers')}}",
+                    url: "{{route('frontend.inspections.filterInspections')}}",
                     type: "GET",
                     data: $('#filterForm').serialize(),
                     success: function(response) {
@@ -141,7 +141,7 @@
                         // $("#submit").attr("disabled", false);
                         // document.getElementById("filterForm").reset();
 
-                        $('#tankers').html(response);  
+                        $('#inspections').html(response);  
 
                     }
                 });

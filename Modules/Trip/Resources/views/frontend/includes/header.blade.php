@@ -30,7 +30,7 @@
           </div>
         @endif
         <li class="nav-item {{Route::currentRouteName() == 'frontend.index' ? 'active' : ''}}"><a href="/" class="nav-link">Home</a></li>
-        <li class="nav-item {{Route::currentRouteName() == 'frontend.tankers.index' ? 'active' : ''}}"><a href="{{route('frontend.tankers.index')}}" class="nav-link">Catalog</a></li>
+        <li class="nav-item {{Route::currentRouteName() == 'frontend.inspections.index' ? 'active' : ''}}"><a href="{{route('frontend.inspections.index')}}" class="nav-link">Catalog</a></li>
         <li class="nav-item " title="Bookings"><a href="{{route('frontend.bookings.index')}}" class="nav-link"> <i class="fa-solid fa-book fa-lg mt-1" style= "height:24px;width:24px"></i></a></li>
         @auth
           <li class="dropdown d-none d-lg-block nav-button">

@@ -25,10 +25,10 @@ class TankersImport implements ToCollection, WithHeadingRow
 
     public function collection(Collection $rows)
     {
-
+        $inc=0;
         foreach ($rows as $row) {
-            
-            \Log::debug($row['tahun_registrasi']);
+            $inc++;
+
             if($row['tahun_registrasi']){
                 $tahun_registrasi = convert_slash_to_basic_date($row['tahun_registrasi']);
             }
@@ -81,7 +81,7 @@ class TankersImport implements ToCollection, WithHeadingRow
                 'data_tm_k3_t2'                  => $row['data_tm_k3_t2'],
                 'data_tm_k3_t3'                  => $row['data_tm_k3_t3'],
                 'nomor_surat_tera'                  => $row['nomor_surat_tera'],
-                'keterengan'                  => $row['keterengan'],
+                'keterangan'                  => $row['keterangan'],
             ]);
         }
     }

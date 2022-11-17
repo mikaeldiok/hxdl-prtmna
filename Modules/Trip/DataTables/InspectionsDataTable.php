@@ -1,18 +1,18 @@
 <?php
 
-namespace Modules\Vehicle\DataTables;
+namespace Modules\Trip\DataTables;
 
 use Carbon\Carbon;
 use Illuminate\Support\HtmlString;
-use Modules\Vehicle\Services\TankerService;
-use Modules\Vehicle\Entities\Tanker;
+use Modules\Trip\Services\InspectionService;
+use Modules\Trip\Entities\Inspection;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class TankersDataTable extends DataTable
+class InspectionsDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -20,11 +20,11 @@ class TankersDataTable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function __construct(TankerService $tankerService)
+    public function __construct(InspectionService $inspectionService)
     {
-        $this->module_name = 'tankers';
+        $this->module_name = 'inspections';
 
-        $this->tankerService = $tankerService;
+        $this->inspectionService = $inspectionService;
     }
 
     public function dataTable($query)
@@ -60,13 +60,13 @@ class TankersDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Tanker $model
+     * @param \App\Inspection $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query()
     {
         $user = auth()->user();
-        $data = Tanker::query();
+        $data = Inspection::query();
 
         return $this->applyScopes($data);
     }
@@ -80,7 +80,7 @@ class TankersDataTable extends DataTable
     {
         $created_at = 1;
         return $this->builder()
-                ->setTableId('tankers-table')
+                ->setTableId('inspections-table')
                 ->columns($this->getColumns())
                 ->minifiedAjax()
                 ->dom(config('mk-datatables.mk-dom'))
@@ -151,7 +151,7 @@ class TankersDataTable extends DataTable
             Column::make('data_tm_k3_t1')->title("data_tm_k3_t1")->hidden(),
 
             Column::make('nomor_surat_tera')->title("nomor_surat_tera")->hidden(),
-            Column::make('keterengan')->title("keterengan")->hidden(),
+            Column::make('keterangan')->title("keterangan")->hidden(),
             Column::make('created_at'),
             Column::make('updated_at')->hidden(),
         ];
@@ -164,6 +164,6 @@ class TankersDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Tankers_' . date('YmdHis');
+        return 'Inspections_' . date('YmdHis');
     }
 }

@@ -40,21 +40,21 @@ class CreateTankersTable extends Migration
             $table->string('keterangan_kip')->nullable();
             $table->string('keterangan_mt')->nullable();
 
-            $table->float('data_tm_k1_t1')->nullable();
-            $table->float('data_tm_k1_t2')->nullable();
-            $table->float('data_tm_k1_t3')->nullable();
+            $table->string('data_tm_k1_t1')->nullable();
+            $table->string('data_tm_k1_t2')->nullable();
+            $table->string('data_tm_k1_t3')->nullable();
 
-            $table->float('data_tm_k2_t1')->nullable();
-            $table->float('data_tm_k2_t2')->nullable();
-            $table->float('data_tm_k2_t3')->nullable();
+            $table->string('data_tm_k2_t1')->nullable();
+            $table->string('data_tm_k2_t2')->nullable();
+            $table->string('data_tm_k2_t3')->nullable();
 
-            $table->float('data_tm_k3_t1')->nullable();
-            $table->float('data_tm_k3_t2')->nullable();
-            $table->float('data_tm_k3_t3')->nullable();
+            $table->string('data_tm_k3_t1')->nullable();
+            $table->string('data_tm_k3_t2')->nullable();
+            $table->string('data_tm_k3_t3')->nullable();
 
             $table->string('nomor_surat_tera')->nullable();
 
-            $table->string('keterengan')->nullable();
+            $table->string('keterangan')->nullable();
 
             $table->boolean('available')->default('1');
             $table->timestamps();

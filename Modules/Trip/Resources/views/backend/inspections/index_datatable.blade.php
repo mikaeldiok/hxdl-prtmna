@@ -92,13 +92,13 @@
 @stop
 
 @push ('after-styles')
-<!-- DataTables Vehicle and Extensions -->
+<!-- DataTables Trip and Extensions -->
 <link rel="stylesheet" href="{{ asset('vendor/datatable/datatables.min.css') }}">
 
 @endpush
 
 @push ('after-scripts')
-<!-- DataTables Vehicle and Extensions -->
+<!-- DataTables Trip and Extensions -->
 <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
 
 <script type="text/javascript">

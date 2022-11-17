@@ -66,7 +66,7 @@
                                 <a href="{{ url("admin/$module_name", $module_name_singular->id) }}">{{ $module_name_singular->name }}</a>
                             </td>
                             <td>
-                                {{ $module_name_singular->tanker_id }}
+                                {{ $module_name_singular->inspection_id }}
                             </td>
                             <td>
                                 {{ $module_name_singular->updated_at->diffForHumans() }}

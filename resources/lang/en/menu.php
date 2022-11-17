@@ -10,6 +10,10 @@ return [
         'tankers'           => 'Tankers',
     ],
     
+    'trip' => [
+        'title'             => 'Trip',
+        'inspections'        => 'Inspection',
+    ],
 
     'blog' => [
         'title'             => 'Blog',

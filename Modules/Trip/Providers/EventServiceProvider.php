@@ -1,20 +1,20 @@
 <?php
 
-namespace Modules\Vehicle\Providers;
+namespace Modules\Trip\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 //Events
-Use Modules\Vehicle\Events\TankerRegistered;
+Use Modules\Trip\Events\InspectionRegistered;
 
 //Listeners
-Use Modules\Vehicle\Listeners\NotifyTanker;
+Use Modules\Trip\Listeners\NotifyInspection;
 
 class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
-        TankerRegistered::class => [
-            NotifyTanker::class,
+        InspectionRegistered::class => [
+            NotifyInspection::class,
         ],
     ];
 }

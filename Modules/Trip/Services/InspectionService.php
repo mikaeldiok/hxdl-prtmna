@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Vehicle\Services;
+namespace Modules\Trip\Services;
 
-use Modules\Vehicle\Entities\Core;
-use Modules\Vehicle\Entities\Tanker;
+use Modules\Trip\Entities\Core;
+use Modules\Trip\Entities\Inspection;
 use Modules\Recruiter\Entities\Booking;
 
 use Exception;
@@ -11,7 +11,7 @@ use Carbon\Carbon;
 use Auth;
 
 use ConsoleTVs\Charts\Classes\Echarts\Chart;
-use App\Charts\TankerPerStatus;
+use App\Charts\InspectionPerStatus;
 use App\Exceptions\GeneralException;
 
 use Illuminate\Support\Facades\DB;
@@ -23,8 +23,8 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 
-use Modules\Vehicle\Imports\TankersImport;
-use Modules\Vehicle\Events\TankerRegistered;
+use Modules\Trip\Imports\InspectionsImport;
+use Modules\Trip\Events\InspectionRegistered;
 
 use App\Events\Backend\UserCreated;
 use App\Events\Backend\UserUpdated;
@@ -32,11 +32,11 @@ use App\Events\Backend\UserUpdated;
 use App\Models\User;
 use App\Models\Userprofile;
 
-class TankerService{
+class InspectionService{
 
     public function __construct()
         {        
-        $this->module_title = Str::plural(class_basename(Tanker::class));
+        $this->module_title = Str::plural(class_basename(Inspection::class));
         $this->module_name = Str::lower($this->module_title);
         
         }
@@ -45,65 +45,65 @@ class TankerService{
 
         Log::info(label_case($this->module_title.' '.__FUNCTION__).' | User:'.(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
 
-        $tanker =Tanker::query()->orderBy('id','desc')->get();
+        $inspection =Inspection::query()->orderBy('id','desc')->get();
         
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> $tanker,
+            'data'=> $inspection,
         );
     }
     
-    public function getAllTankers(){
+    public function getAllInspections(){
 
-        $tanker =Tanker::query()->available()->orderBy('id','desc')->get();
+        $inspection =Inspection::query()->available()->orderBy('id','desc')->get();
         
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> $tanker,
+            'data'=> $inspection,
         );
     }
 
-    public function getPopularTanker(){
+    public function getPopularInspection(){
 
-        $tanker =DB::table('bookings')
-                    ->select('bookings.tanker_id','name','', DB::raw('count(*) as total'))
-                    ->join('tankers', 'bookings.tanker_id', '=', 'tankers.id')
-                    ->groupBy('bookings.tanker_id')
+        $inspection =DB::table('bookings')
+                    ->select('bookings.inspection_id','name','', DB::raw('count(*) as total'))
+                    ->join('inspections', 'bookings.inspection_id', '=', 'inspections.id')
+                    ->groupBy('bookings.inspection_id')
                     ->orderBy('total','desc')
                     ->get();
                 
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> $tanker,
+            'data'=> $inspection,
         );
     }
 
-    public function filterTankers($pagination,$request){
+    public function filterInspections($pagination,$request){
 
-        $tanker =Tanker::query()->available();
+        $inspection =Inspection::query()->available();
 
         if(count($request->all()) > 0){
             if($request->has('major')){
-                $tanker->whereIn('major', $request->input('major'));
+                $inspection->whereIn('major', $request->input('major'));
             }
 
             if($request->has('year_class')){
-                $tanker->whereIn('year_class', $request->input('year_class'));
+                $inspection->whereIn('year_class', $request->input('year_class'));
             }
 
             if($request->has('height')){
-                $tanker->where('height', ">=", (float)$request->input('height'));
+                $inspection->where('height', ">=", (float)$request->input('height'));
             }
 
             if($request->has('weight')){
-                $tanker->where('weight', ">=", (float)$request->input('weight'));
+                $inspection->where('weight', ">=", (float)$request->input('weight'));
             }
 
             if($request->has('skills')){
-                $tanker->where(function ($query) use ($request){
+                $inspection->where(function ($query) use ($request){
                     $checkSkills = $request->input('skills');
                     foreach($checkSkills as $skill){
                         if($request->input('must_have_all_skills')){
@@ -116,7 +116,7 @@ class TankerService{
             }
 
             if($request->has('certificate')){
-                $tanker->where(function ($query) use ($request){
+                $inspection->where(function ($query) use ($request){
                     $checkCerts = $request->input('certificate');
                     foreach($checkCerts as $cert){
                         if($request->input('must_have_all_certificate')){
@@ -129,53 +129,53 @@ class TankerService{
             }
         }
 
-        $tanker = $tanker->paginate($pagination);
+        $inspection = $inspection->paginate($pagination);
         
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> $tanker,
+            'data'=> $inspection,
         );
     }
 
-    public function getPaginatedTankers($pagination,$request){
+    public function getPaginatedInspections($pagination,$request){
 
-        $tanker =Tanker::query()->available();
+        $inspection =Inspection::query()->available();
 
         if(count($request->all()) > 0){
 
         }
 
-        $tanker = $tanker->paginate($pagination);
+        $inspection = $inspection->paginate($pagination);
         
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> $tanker,
+            'data'=> $inspection,
         );
     }
     
-    public function get_tanker($request){
+    public function get_inspection($request){
 
         $id = $request["id"];
 
-        $tanker =Tanker::findOrFail($id);
+        $inspection =Inspection::findOrFail($id);
         
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> $tanker,
+            'data'=> $inspection,
         );
     }
 
     public function getList(){
 
-        $tanker =Tanker::query()->orderBy('order','asc')->get();
+        $inspection =Inspection::query()->orderBy('order','asc')->get();
 
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> $tanker,
+            'data'=> $inspection,
         );
     }
 
@@ -200,31 +200,31 @@ class TankerService{
 
         try {
             
-            $tankerObject = new Tanker;
-            $tankerObject->fill($data);
+            $inspectionObject = new Inspection;
+            $inspectionObject->fill($data);
 
-            if($tankerObject->tahun_registrasi){
-                $tankerObject->tahun_registrasi = convert_slash_to_basic_date($tankerObject->tahun_registrasi);
+            if($inspectionObject->tahun_registrasi){
+                $inspectionObject->tahun_registrasi = convert_slash_to_basic_date($inspectionObject->tahun_registrasi);
             }
-            if($tankerObject->exp_stnk){
-                $tankerObject->exp_stnk = convert_slash_to_basic_date($tankerObject->exp_stnk);
+            if($inspectionObject->exp_stnk){
+                $inspectionObject->exp_stnk = convert_slash_to_basic_date($inspectionObject->exp_stnk);
             }
-            if($tankerObject->exp_keur){
-                $tankerObject->exp_keur = convert_slash_to_basic_date($tankerObject->exp_keur);
+            if($inspectionObject->exp_keur){
+                $inspectionObject->exp_keur = convert_slash_to_basic_date($inspectionObject->exp_keur);
             }
-            if($tankerObject->exp_tera){
-                $tankerObject->exp_tera = convert_slash_to_basic_date($tankerObject->exp_tera);
+            if($inspectionObject->exp_tera){
+                $inspectionObject->exp_tera = convert_slash_to_basic_date($inspectionObject->exp_tera);
             }
-            if($tankerObject->exp_kip){
-                $tankerObject->exp_kip = convert_slash_to_basic_date($tankerObject->exp_kip);
+            if($inspectionObject->exp_kip){
+                $inspectionObject->exp_kip = convert_slash_to_basic_date($inspectionObject->exp_kip);
             }
-            if($tankerObject->end_date_mt){
-                $tankerObject->end_date_mt = convert_slash_to_basic_date($tankerObject->end_date_mt);
+            if($inspectionObject->end_date_mt){
+                $inspectionObject->end_date_mt = convert_slash_to_basic_date($inspectionObject->end_date_mt);
             }
 
-            $tankerObjectArray = $tankerObject->toArray();
+            $inspectionObjectArray = $inspectionObject->toArray();
 
-            $tanker = Tanker::create($tankerObjectArray);
+            $inspection = Inspection::create($inspectionObjectArray);
             
         }catch (Exception $e){
             DB::rollBack();
@@ -238,36 +238,36 @@ class TankerService{
 
         DB::commit();
 
-        Log::info(label_case($this->module_title.' '.__function__)." | '".$tanker->name.'(ID:'.$tanker->id.") ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
+        Log::info(label_case($this->module_title.' '.__function__)." | '".$inspection->name.'(ID:'.$inspection->id.") ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
 
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> $tanker,
+            'data'=> $inspection,
         );
     }
 
-    public function show($id, $tankerId = null){
+    public function show($id, $inspectionId = null){
 
         Log::info(label_case($this->module_title.' '.__function__).' | User:'.(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
 
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> Tanker::findOrFail($id),
+            'data'=> Inspection::findOrFail($id),
         );
     }
 
     public function edit($id){
 
-        $tanker = Tanker::findOrFail($id);
+        $inspection = Inspection::findOrFail($id);
 
-        Log::info(label_case($this->module_title.' '.__function__)." | '".$tanker->name.'(ID:'.$tanker->id.") ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
+        Log::info(label_case($this->module_title.' '.__function__)." | '".$inspection->name.'(ID:'.$inspection->id.") ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
 
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> $tanker,
+            'data'=> $inspection,
         );
     }
 
@@ -279,31 +279,31 @@ class TankerService{
 
         try{
 
-            $tankerObject = new Tanker;
-            $tankerObject->fill($data);
+            $inspectionObject = new Inspection;
+            $inspectionObject->fill($data);
             
-            if($tankerObject->tahun_registrasi){
-                $tankerObject->tahun_registrasi = convert_slash_to_basic_date($tankerObject->tahun_registrasi);
+            if($inspectionObject->tahun_registrasi){
+                $inspectionObject->tahun_registrasi = convert_slash_to_basic_date($inspectionObject->tahun_registrasi);
             }
-            if($tankerObject->exp_stnk){
-                $tankerObject->exp_stnk = convert_slash_to_basic_date($tankerObject->exp_stnk);
+            if($inspectionObject->exp_stnk){
+                $inspectionObject->exp_stnk = convert_slash_to_basic_date($inspectionObject->exp_stnk);
             }
-            if($tankerObject->exp_keur){
-                $tankerObject->exp_keur = convert_slash_to_basic_date($tankerObject->exp_keur);
+            if($inspectionObject->exp_keur){
+                $inspectionObject->exp_keur = convert_slash_to_basic_date($inspectionObject->exp_keur);
             }
-            if($tankerObject->exp_tera){
-                $tankerObject->exp_tera = convert_slash_to_basic_date($tankerObject->exp_tera);
+            if($inspectionObject->exp_tera){
+                $inspectionObject->exp_tera = convert_slash_to_basic_date($inspectionObject->exp_tera);
             }
-            if($tankerObject->exp_kip){
-                $tankerObject->exp_kip = convert_slash_to_basic_date($tankerObject->exp_kip);
+            if($inspectionObject->exp_kip){
+                $inspectionObject->exp_kip = convert_slash_to_basic_date($inspectionObject->exp_kip);
             }
-            if($tankerObject->end_date_mt){
-                $tankerObject->end_date_mt = convert_slash_to_basic_date($tankerObject->end_date_mt);
+            if($inspectionObject->end_date_mt){
+                $inspectionObject->end_date_mt = convert_slash_to_basic_date($inspectionObject->end_date_mt);
             }
             
-            $updating = Tanker::findOrFail($id)->update($tankerObject->toArray());
+            $updating = Inspection::findOrFail($id)->update($inspectionObject->toArray());
 
-            $updated_tanker = Tanker::findOrFail($id);
+            $updated_inspection = Inspection::findOrFail($id);
 
 
         }catch (Exception $e){
@@ -319,12 +319,12 @@ class TankerService{
 
         DB::commit();
 
-        Log::info(label_case($this->module_title.' '.__FUNCTION__)." | '".$updated_tanker->name.'(ID:'.$updated_tanker->id.") ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
+        Log::info(label_case($this->module_title.' '.__FUNCTION__)." | '".$updated_inspection->name.'(ID:'.$updated_inspection->id.") ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
 
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> $updated_tanker,
+            'data'=> $updated_inspection,
         );
     }
 
@@ -333,9 +333,9 @@ class TankerService{
         DB::beginTransaction();
 
         try{
-            $tankers = Tanker::findOrFail($id);
+            $inspections = Inspection::findOrFail($id);
     
-            $deleted = $tankers->delete();
+            $deleted = $inspections->delete();
         }catch (Exception $e){
             DB::rollBack();
             Log::critical(label_case($this->module_title.' AT '.Carbon::now().' | Function:'.__FUNCTION__).' | Msg: '.$e->getMessage());
@@ -348,12 +348,12 @@ class TankerService{
 
         DB::commit();
 
-        Log::info(label_case($this->module_title.' '.__FUNCTION__)." | '".$tankers->name.', ID:'.$tankers->id." ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
+        Log::info(label_case($this->module_title.' '.__FUNCTION__)." | '".$inspections->name.', ID:'.$inspections->id." ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
 
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> $tankers,
+            'data'=> $inspections,
         );
     }
 
@@ -364,7 +364,7 @@ class TankerService{
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> Tanker::bookingonlyTrashed()->get(),
+            'data'=> Inspection::bookingonlyTrashed()->get(),
         );
     }
 
@@ -373,8 +373,8 @@ class TankerService{
         DB::beginTransaction();
 
         try{
-            $restoring =  Tanker::bookingwithTrashed()->where('id',$id)->restore();
-            $tankers = Tanker::findOrFail($id);
+            $restoring =  Inspection::bookingwithTrashed()->where('id',$id)->restore();
+            $inspections = Inspection::findOrFail($id);
         }catch (Exception $e){
             DB::rollBack();
             Log::critical(label_case($this->module_title.' AT '.Carbon::now().' | Function:'.__FUNCTION__).' | Msg: '.$e->getMessage());
@@ -387,12 +387,12 @@ class TankerService{
 
         DB::commit();
 
-        Log::info(label_case(__FUNCTION__)." ".$this->module_title.": ".$tankers->name.", ID:".$tankers->id." ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
+        Log::info(label_case(__FUNCTION__)." ".$this->module_title.": ".$inspections->name.", ID:".$inspections->id." ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
 
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> $tankers,
+            'data'=> $inspections,
         );
     }
 
@@ -400,9 +400,9 @@ class TankerService{
         DB::beginTransaction();
 
         try{
-            $tankers = Tanker::bookingwithTrashed()->findOrFail($id);
+            $inspections = Inspection::bookingwithTrashed()->findOrFail($id);
     
-            $deleted = $tankers->forceDelete();
+            $deleted = $inspections->forceDelete();
         }catch (Exception $e){
             DB::rollBack();
             Log::critical(label_case($this->module_title.' AT '.Carbon::now().' | Function:'.__FUNCTION__).' | Msg: '.$e->getMessage());
@@ -415,17 +415,17 @@ class TankerService{
 
         DB::commit();
 
-        Log::info(label_case($this->module_title.' '.__FUNCTION__)." | '".$tankers->name.', ID:'.$tankers->id." ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
+        Log::info(label_case($this->module_title.' '.__FUNCTION__)." | '".$inspections->name.', ID:'.$inspections->id." ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
 
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> $tankers,
+            'data'=> $inspections,
         );
     }
 
     public function import(Request $request){
-        $import = Excel::import(new TankersImport($request), $request->file('data_file'));
+        $import = Excel::import(new InspectionsImport($request), $request->file('data_file'));
     
         return (object) array(
             'error'=> false,            
@@ -478,7 +478,7 @@ class TankerService{
         
         $options = self::prepareOptions();
 
-        $year_class_raw = DB::table('tankers')
+        $year_class_raw = DB::table('inspections')
                         ->select('year_class', DB::raw('count(*) as total'))
                         ->groupBy('year_class')
                         ->orderBy('year_class','desc')
@@ -497,7 +497,7 @@ class TankerService{
         return array_merge($options,$filterOp);
     }
 
-    public function getTankerPerStatusChart(){
+    public function getInspectionPerStatusChart(){
 
         $chart = new Chart;
 
@@ -521,9 +521,9 @@ class TankerService{
 
             $status_raw = DB::table('bookings')
                         ->select('status', DB::raw('count(*) as total'))
-                        ->join('tankers', 'bookings.tanker_id', '=', 'tankers.id')
-                        ->where('tankers.major',$major)
-                        ->where('tankers.available',1)
+                        ->join('inspections', 'bookings.inspection_id', '=', 'inspections.id')
+                        ->where('inspections.major',$major)
+                        ->where('inspections.available',1)
                         ->where('status',"<>",$last_key)
                         ->groupBy('status')
                         ->orderBy('status','desc')
@@ -558,7 +558,7 @@ class TankerService{
         return $chart;
     }
 
-    public function getDoneTankersChart(){
+    public function getDoneInspectionsChart(){
 
         $chart = new Chart;
 
@@ -578,7 +578,7 @@ class TankerService{
             $majors[] = $value;
         }
 
-        $year_class_list_raw = DB::table('tankers')
+        $year_class_list_raw = DB::table('inspections')
                                 ->select('year_class')
                                 ->groupBy('year_class')
                                 ->orderBy('year_class','asc')
@@ -595,13 +595,13 @@ class TankerService{
         foreach($majors as $major){
 
             $year_class_raw = DB::table('bookings')
-                        ->select('tankers.year_class', DB::raw('count(*) as total'))
-                        ->join('tankers', 'bookings.tanker_id', '=', 'tankers.id')
+                        ->select('inspections.year_class', DB::raw('count(*) as total'))
+                        ->join('inspections', 'bookings.inspection_id', '=', 'inspections.id')
                         ->distinct()
-                        ->where('tankers.major',$major)
+                        ->where('inspections.major',$major)
                         ->where('status',"=",$last_key)
-                        ->groupBy('tankers.year_class')
-                        ->orderBy('tankers.year_class','asc')
+                        ->groupBy('inspections.year_class')
+                        ->orderBy('inspections.year_class','asc')
                         ->get();
 
             $year_class = [];
@@ -636,23 +636,23 @@ class TankerService{
         return $chart;
     }
 
-    public function getTankerPerYearClassChart(){
+    public function getInspectionPerYearClassChart(){
 
         $chart = new Chart;
 
-        $tankers_active = DB::table('tankers')
+        $inspections_active = DB::table('inspections')
                             ->select('year_class', DB::raw('count(*) as total'))
                             ->where('available',1)
                             ->groupBy('year_class')
                             ->orderBy('year_class','asc')
                             ->get();
 
-        $tankers=[];
-        foreach($tankers_active as $item){
-            $tankers += [$item->year_class => $item->total];
+        $inspections=[];
+        foreach($inspections_active as $item){
+            $inspections += [$item->year_class => $item->total];
         }
 
-        [$keys, $values] = Arr::divide($tankers);
+        [$keys, $values] = Arr::divide($inspections);
 
         $chart->labels($keys);
 
@@ -675,7 +675,7 @@ class TankerService{
 
     public static function prepareInsight(){
 
-        $countAllTankers = Tanker::all()->count();
+        $countAllInspections = Inspection::all()->count();
 
         $raw_status= Core::getRawData('recruitment_status');
         $status = [];
@@ -684,12 +684,12 @@ class TankerService{
             $status[] = $value;
         }
 
-        $countDoneTankers = Booking::where('status',end($status))->get()->count();
+        $countDoneInspections = Booking::where('status',end($status))->get()->count();
         
         $stats = (object) array(
             'status'                    => $status,
-            'countAllTankers'          => $countAllTankers,
-            'countDoneTankers'         => $countDoneTankers,
+            'countAllInspections'          => $countAllInspections,
+            'countDoneInspections'         => $countDoneInspections,
         );
 
         return $stats;

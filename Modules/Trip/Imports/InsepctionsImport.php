@@ -1,24 +1,24 @@
 <?php
 
-namespace Modules\Vehicle\Imports;
+namespace Modules\Trip\Imports;
 
 use App\Overrides\Zip;
 use ZipArchive;
 use Carbon\Carbon;
-use Modules\Vehicle\Entities\Tanker;
+use Modules\Trip\Entities\Inspection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class TankersImport implements ToCollection, WithHeadingRow
+class InspectionsImport implements ToCollection, WithHeadingRow
 {
     protected Request $request;
 
     public function __construct(Request $request)
     {
-        $this->module_title = Str::plural(class_basename(Tanker::class));
+        $this->module_title = Str::plural(class_basename(Inspection::class));
         $this->module_name = Str::lower($this->module_title);
         $this->request = $request;
     }
@@ -48,7 +48,7 @@ class TankersImport implements ToCollection, WithHeadingRow
                 $end_date_mt = convert_slash_to_basic_date($row['end_date_mt']);
             }
 
-            $tanker = Tanker::updateOrCreate([
+            $inspection = Inspection::updateOrCreate([
                 'nomor_polisi'              => $row['nomor_polisi'],
                 'produk'                    => $row['produk'],
                 'nama_perusahaan_transportir'                    => $row['nama_perusahaan_transportir'],
@@ -81,7 +81,7 @@ class TankersImport implements ToCollection, WithHeadingRow
                 'data_tm_k3_t2'                  => $row['data_tm_k3_t2'],
                 'data_tm_k3_t3'                  => $row['data_tm_k3_t3'],
                 'nomor_surat_tera'                  => $row['nomor_surat_tera'],
-                'keterengan'                  => $row['keterengan'],
+                'keterangan'                  => $row['keterangan'],
             ]);
         }
     }

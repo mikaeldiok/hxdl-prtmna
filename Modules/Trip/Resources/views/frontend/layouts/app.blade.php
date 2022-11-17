@@ -33,7 +33,7 @@
 
 <body>
 
-    @include('vehicle::frontend.includes.header')
+    @include('trip::frontend.includes.header')
 
     <!-- <x-preloader /> -->
 

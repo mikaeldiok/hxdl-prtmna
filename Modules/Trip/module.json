@@ -1,11 +1,11 @@
 {
-    "name": "Vehicle",
-    "alias": "vehicle",
+    "name": "Trip",
+    "alias": "trip",
     "description": "",
     "keywords": [],
     "priority": 0,
     "providers": [
-        "Modules\\Vehicle\\Providers\\VehicleServiceProvider"
+        "Modules\\Trip\\Providers\\TripServiceProvider"
     ],
     "aliases": {},
     "files": [],

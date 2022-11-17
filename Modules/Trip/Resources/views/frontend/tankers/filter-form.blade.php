@@ -1,12 +1,12 @@
 @php
-    $options = Modules\Vehicle\Services\TankerService::prepareFilter();
+    $options = Modules\Trip\Services\InspectionService::prepareFilter();
 @endphp
 <div class="row">
     <div class="col-9">
         <div class="form-group">
             <?php
             $field_name = 'major';
-            $field_lable = __("vehicle::$module_name.$field_name");
+            $field_lable = __("trip::$module_name.$field_name");
             $field_placeholder = "-- Pilih --";
             $required = "";
             $select_options = $options['majors'];
@@ -21,7 +21,7 @@
         <div class="form-group">
             <?php
             $field_name = 'year_class';
-            $field_lable = __("vehicle::$module_name.$field_name");
+            $field_lable = __("trip::$module_name.$field_name");
             $field_placeholder = $field_lable;
             $required = "";
             $select_options = $options['year_class'];
@@ -62,7 +62,7 @@
         <div class="form-group">
             <?php
             $field_name = 'skills';
-            $field_lable = __("vehicle::$module_name.$field_name");
+            $field_lable = __("trip::$module_name.$field_name");
             $field_placeholder = $field_lable;
             $required = "";
             $select_options = $options['skills'];
@@ -88,7 +88,7 @@
         <div class="form-group">
             <?php
             $field_name = 'certificate';
-            $field_lable = __("vehicle::$module_name.$field_name");
+            $field_lable = __("trip::$module_name.$field_name");
             $field_placeholder = $field_lable;
             $required = "";
             $select_options = $options['certificate'];

@@ -1,12 +1,12 @@
 @php
-    $status = \Modules\Vehicle\Services\TankerService::prepareStatusFilter();
+    $status = \Modules\Trip\Services\InspectionService::prepareStatusFilter();
     \Log::debug($status);
     $firstStat = reset($status);
 @endphp
 <script>
 
     $(document).ready(function(){
-        $(document).on('click', 'button.choose-tanker', function(e){
+        $(document).on('click', 'button.choose-inspection', function(e){
             var ele = $(this);  
             var fireAjax = false;
 
@@ -22,22 +22,22 @@
                 closeOnConfirm: false
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        callPickTanker(ele);
+                        callPickInspection(ele);
                     }
                 });
             }else{
-                callPickTanker(ele);
+                callPickInspection(ele);
             }
 
         });
 
-        function callPickTanker(ele){
+        function callPickInspection(ele){
                 $.ajax({
                     type: "POST",
-                    url: '{{route("frontend.bookings.pickTanker")}}',
+                    url: '{{route("frontend.bookings.pickInspection")}}',
                     data: {
                         "corporation_id" : "{{auth()->user()->corporation->id ?? 0}}",
-                        "tanker_id" : ele.attr("data-id"),
+                        "inspection_id" : ele.attr("data-id"),
                         "status" : "{{$firstStat}}",
                         "_method":"POST",
                         "_token": "{{ csrf_token() }}"

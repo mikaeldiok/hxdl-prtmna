@@ -2,7 +2,7 @@
 
 return [
 
-    'vehicle_core_code'                => 'Code',
-    'vehicle_core_name'                => 'Name',
-    'vehicle_core_value'               => 'Value',
+    'trip_core_code'                => 'Code',
+    'trip_core_name'                => 'Name',
+    'trip_core_value'               => 'Value',
 ];

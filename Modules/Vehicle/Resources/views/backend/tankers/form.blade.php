@@ -456,8 +456,8 @@
     <div class="col-6">
         <div class="form-group">
             <?php
-            $field_name = 'keterengan';
-            $field_lable = 'keterengan';
+            $field_name = 'keterangan';
+            $field_lable = 'keterangan';
             $required = "";
             ?>
             {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!}

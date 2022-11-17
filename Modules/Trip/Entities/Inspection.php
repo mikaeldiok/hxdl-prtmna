@@ -1,25 +1,25 @@
 <?php
 
-namespace Modules\Vehicle\Entities;
+namespace Modules\Trip\Entities;
 
 use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Tanker extends BaseModel
+class Inspection extends BaseModel
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = "tankers";
+    protected $table = "inspections";
 
-    protected static $logName = 'tankers';
+    protected static $logName = 'inspections';
     protected static $logOnlyDirty = true;
-    protected static $logAttributes = ['nomor_polisi', 'id'];
+    protected static $logAttributes = ['tanker_id', 'day_id', 'id'];
 
     protected static function newFactory()
     {
-        return \Modules\Vehicle\Database\factories\TankerFactory::new();
+        return \Modules\Trip\Database\factories\InspectionFactory::new();
     }
 }

@@ -151,7 +151,7 @@ class TankersDataTable extends DataTable
             Column::make('data_tm_k3_t1')->title("data_tm_k3_t1")->hidden(),
 
             Column::make('nomor_surat_tera')->title("nomor_surat_tera")->hidden(),
-            Column::make('keterengan')->title("keterengan")->hidden(),
+            Column::make('keterangan')->title("keterangan")->hidden(),
             Column::make('created_at'),
             Column::make('updated_at')->hidden(),
         ];

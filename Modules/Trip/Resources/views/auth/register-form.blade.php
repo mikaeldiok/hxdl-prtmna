@@ -2,8 +2,8 @@
     <div class="col">
         <div class="form-group">
             <?php
-            $field_name = 'tanker_name';
-            $field_lable = __("vehicle::$module_name.$field_name");
+            $field_name = 'inspection_name';
+            $field_lable = __("trip::$module_name.$field_name");
             $field_placeholder = $field_lable;
             $required = "required";
             ?>
@@ -16,12 +16,12 @@
     <div class="col-md-5">
         <div class="form-group">
             <?php
-            $field_name = 'tanker_type';
-            $field_data_id = 'tanker_type';
-            $field_lable = __("vehicle::$module_name.$field_name");
+            $field_name = 'inspection_type';
+            $field_data_id = 'inspection_type';
+            $field_lable = __("trip::$module_name.$field_name");
             $field_placeholder = __("Select an option");
             $required = "required";
-            $select_options = $tanker_types;
+            $select_options = $inspection_types;
             ?>
             {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!}
             {{ html()->select($field_data_id, $select_options)->placeholder($field_placeholder)->class('form-control select2')->attributes(["$required"]) }}
@@ -32,8 +32,8 @@
     <div class="col-6">
         <div class="form-group">
             <?php
-            $field_name = 'tanker_phone';
-            $field_lable = __("vehicle::$module_name.$field_name");
+            $field_name = 'inspection_phone';
+            $field_lable = __("trip::$module_name.$field_name");
             $field_placeholder = $field_lable;
             $required = "required";
             ?>
@@ -46,8 +46,8 @@
     <div class="col-12">
         <div class="form-group">
             <?php
-            $field_name = 'tanker_address';
-            $field_lable = __("vehicle::$module_name.$field_name");
+            $field_name = 'inspection_address';
+            $field_lable = __("trip::$module_name.$field_name");
             $field_placeholder = $field_lable;
             $required = "required";
             ?>
@@ -61,9 +61,9 @@
     <div class="col-md-8">
         <div class="form-group">
             <?php
-            $field_name = 'tanker_bank_name';
-            $field_data_id = 'tanker_bank_name';
-            $field_lable = __("vehicle::$module_name.$field_name");
+            $field_name = 'inspection_bank_name';
+            $field_data_id = 'inspection_bank_name';
+            $field_lable = __("trip::$module_name.$field_name");
             $field_placeholder = __("Select an option");
             $required = "required";
             $select_options = $banks;
@@ -77,8 +77,8 @@
     <div class="col-8">
         <div class="form-group">
             <?php
-            $field_name = 'tanker_bank_account';
-            $field_lable = __("vehicle::$module_name.$field_name");
+            $field_name = 'inspection_bank_account';
+            $field_lable = __("trip::$module_name.$field_name");
             $field_placeholder = $field_lable;
             $required = "required";
             ?>
@@ -94,8 +94,8 @@
     <div class="col-12">
         <div class="form-group">
             <?php
-            $field_name = 'tanker_email';
-            $field_lable = __("vehicle::$module_name.$field_name");
+            $field_name = 'inspection_email';
+            $field_lable = __("trip::$module_name.$field_name");
             $field_placeholder = $field_lable;
             $required = "required";
             ?>
@@ -109,7 +109,7 @@
         <div class="form-group">
             <?php
             $field_name = 'password';
-            $field_lable = __("vehicle::$module_name.$field_name");
+            $field_lable = __("trip::$module_name.$field_name");
             $field_placeholder = $field_lable;
             $required = "required";
             ?>
