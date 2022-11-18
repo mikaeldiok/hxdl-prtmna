@@ -155,9 +155,7 @@ class TankerService{
         );
     }
     
-    public function get_tanker($request){
-
-        $id = $request["id"];
+    public function get_tanker($id){
 
         $tanker =Tanker::findOrFail($id);
         

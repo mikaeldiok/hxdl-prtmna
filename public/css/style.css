@@ -634,6 +634,15 @@ textarea.form-control {
 .bg-mild-purple {
   background: #652f8c !important; }
   
+.bg-black {
+  background: #000000 !important; }
+  
+.bg-orange {
+  background: #ff7300 !important; }
+
+.bg-yellow {
+  background: #ffc012 !important; }
+  
 .bg-bright-yellow {
   background: #fdd33d !important; }
  

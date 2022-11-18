@@ -26,6 +26,8 @@ class PermissionRoleTableSeeder extends Seeder
         $admin = Role::firstOrCreate(['name' => 'administrator']);
         $manager = Role::firstOrCreate(['name' => 'manager']);
         $executive = Role::firstOrCreate(['name' => 'executive']);
+        $pengawas = Role::firstOrCreate(['name' => 'pengawas']);
+        $hss = Role::firstOrCreate(['name' => 'hss']);
         $user = Role::firstOrCreate(['name' => 'user']);
 
         // Create Permissions
@@ -65,9 +67,14 @@ class PermissionRoleTableSeeder extends Seeder
         echo "\n _Tankers_ Permissions Created.";
 
         \Artisan::call('auth:permission', [
-            'name' => 'inpections',
+            'name' => 'inspections',
         ]);
         echo "\n _Inspections_ Permissions Created.";
+
+        \Artisan::call('auth:permission', [
+            'name' => 'days',
+        ]);
+        echo "\n _Days_ Permissions Created.";
 
         echo "\n\n";
 
@@ -76,6 +83,39 @@ class PermissionRoleTableSeeder extends Seeder
         $manager->givePermissionTo('view_backend');
         $executive->givePermissionTo('view_backend');
 
+        $this->pengawasPermission($pengawas);
+        $this->hssPermission($hss);
+
+
         Schema::enableForeignKeyConstraints();
+    }
+
+    private function pengawasPermission($pengawas){
+
+        Permission::firstOrCreate(['name' => 'approve_by_pengawas']);
+
+        $pengawas->givePermissionTo([
+            'view_backend',
+            'approve_by_pengawas',
+            'view_inspections',
+            'view_days',
+            'add_days',
+            'edit_days',
+            'edit_inspections'
+        ]);
+    }
+
+    private function hssPermission($hss){
+
+        Permission::firstOrCreate(['name' => 'approve_by_hss']);
+
+        $hss->givePermissionTo([
+            'view_backend',
+            'approve_by_hss',
+            'view_inspections',
+            'view_days',
+            'edit_days',
+            'edit_inspections'
+        ]);
     }
 }

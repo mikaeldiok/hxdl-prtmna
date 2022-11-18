@@ -53,9 +53,23 @@ class AuthenticatedSessionController extends Controller
             $canViewBackend = Auth::user()->can('view_backend'); 
 
             if($canViewBackend){
-                $redirectTo = '/admin';
+                if( Auth::user()->hasRole('pengawas')){
+                    $today = getToday();
+
+                    if($today){
+                        if($today->pengawas){
+                            $redirectTo = '/admin';
+                        }else{
+                            return redirect()->route('backend.days.pengawasLogin');
+                        }
+                    }else{
+                        return redirect()->route('backend.days.pengawasLogin');
+                    }
+                }else{
+                    $redirectTo = '/admin';
+                }
             }else{
-                $redirectTo = '/donators/home';
+                $redirectTo = '/';
             }
         }
 

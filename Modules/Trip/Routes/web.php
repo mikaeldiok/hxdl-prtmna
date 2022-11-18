@@ -42,7 +42,7 @@
 *
 * --------------------------------------------------------------------
 */
-Route::group(['namespace' => '\Modules\Trip\Http\Controllers\Frontend', 'as' => 'frontend.', 'middleware' => ['web','auth'], 'prefix' => ''], function () {
+Route::group(['namespace' => '\Modules\Trip\Http\Controllers\Frontend', 'as' => 'frontend.', 'middleware' => ['web'], 'prefix' => ''], function () {
 
     /*
      *
@@ -51,10 +51,11 @@ Route::group(['namespace' => '\Modules\Trip\Http\Controllers\Frontend', 'as' => 
      * ---------------------------------------------------------------------
      */
     $module_name = 'inspections';
-    $controller_name = 'InspectionsController';        
-    Route::get("$module_name/catalog", ['as' => "$module_name.index", 'uses' => "$controller_name@indexPaginated"]);
-    Route::get("$module_name/catalog/filter", ['as' => "$module_name.filterInspections", 'uses' => "$controller_name@filterInspections"]);
-    Route::get("$module_name/{id}-{inspectionId}", ['as' => "$module_name.show", 'uses' => "$controller_name@show"]);
+    $controller_name = 'InspectionsController';
+    Route::get("$module_name/create-part-1", ['as' => "$module_name.create-part-1", 'uses' => "$controller_name@createPart1"]);
+    Route::get("$module_name/store-part-1", ['as' => "$module_name.store-part-1", 'uses' => "$controller_name@storePart1"]);
+    Route::resource("$module_name", "$controller_name");
+
 });
 
 /*
@@ -87,6 +88,19 @@ Route::group(['namespace' => '\Modules\Trip\Http\Controllers\Backend', 'as' => '
     Route::patch("$module_name/trashed/{id}", ['as' => "$module_name.restore", 'uses' => "$controller_name@restore"]);
     Route::delete("$module_name/purge/{id}", ['as' => "$module_name.purge", 'uses' => "$controller_name@purge"]);
     Route::post("$module_name/get_inspection", ['as' => "$module_name.getinspection", 'uses' => "$controller_name@get_inspection"]);
+    Route::post("$module_name/import", ['as' => "$module_name.import", 'uses' => "$controller_name@import"]);
+    Route::resource("$module_name", "$controller_name");
+
+    $module_name = 'days';
+    $controller_name = 'DaysController';
+    Route::get("$module_name/index_list", ['as' => "$module_name.index_list", 'uses' => "$controller_name@index_list"]);
+    Route::get("$module_name/index_data", ['as' => "$module_name.index_data", 'uses' => "$controller_name@index_data"]);
+    Route::get("$module_name/insertname", ['as' => "$module_name.pengawasLogin", 'uses' => "$controller_name@pengawasLogin"]);
+    Route::get("$module_name/nameproccess", ['as' => "$module_name.pengawasLoginProccess", 'uses' => "$controller_name@pengawasLoginProccess"]);
+    Route::get("$module_name/trashed", ['as' => "$module_name.trashed", 'uses' => "$controller_name@trashed"]);
+    Route::patch("$module_name/trashed/{id}", ['as' => "$module_name.restore", 'uses' => "$controller_name@restore"]);
+    Route::delete("$module_name/purge/{id}", ['as' => "$module_name.purge", 'uses' => "$controller_name@purge"]);
+    Route::post("$module_name/get_day", ['as' => "$module_name.getday", 'uses' => "$controller_name@get_day"]);
     Route::post("$module_name/import", ['as' => "$module_name.import", 'uses' => "$controller_name@import"]);
     Route::resource("$module_name", "$controller_name");
 

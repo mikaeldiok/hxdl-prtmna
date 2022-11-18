@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Modules\Trip\Entities\Day;
 
 /*
  * Global helpers file with misc functions.
@@ -18,6 +20,84 @@ if (!function_exists('app_name')) {
         return config('app.name');
     }
 }
+
+if (!function_exists('getToday')) {
+    function getToday(){
+        $today = Day::where('date',Carbon::today())->first();
+
+        if($today){
+            return $today;
+        }
+
+        return false;
+    }
+}
+
+if (!function_exists('syncToday')) {
+    function syncToday($pengawas){
+        DB::beginTransaction();
+
+        try {
+            $today = Day::where('date',Carbon::today())->first();
+
+            if($today){
+                $today->pengawas = $pengawas;
+                $today->save();
+
+            }else{
+                $todayObject = new Day;
+                $todayObject->date = Carbon::today();
+                $todayObject->pengawas = $pengawas;
+
+                $todayArray = $todayObject->toArray();
+
+                $today = Day::create($todayArray);
+            }
+
+            
+        }catch (Exception $e){
+            DB::rollBack();
+            Log::critical(label_case($this->module_title.' ON LINE '.__LINE__.' AT '.Carbon::now().' | Function:'.__FUNCTION__).' | msg: '.$e->getMessage());
+            return (object) array(
+                'error'=> true,
+                'message'=> $e->getMessage(),
+                'data'=> null,
+            );
+        }
+
+        DB::commit();
+
+        Log::info(label_case($this->module_title.' '.__function__)." | '".$day->name.'(ID:'.$day->id.") ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
+
+        return (object) array(
+            'error'=> false,            
+            'message'=> '',
+            'data'=> $today,
+        );
+    }
+}
+
+/*
+ * Global helpers file with misc functions.
+ */
+if (!function_exists('get_today')) {
+    /**
+     * Helper to grab the application name.
+     *
+     * @return mixed
+     */
+    function get_today()
+    {
+        $today = Day::where('date',Carbon::today())->first();
+
+        if(!$today){
+            $today = new Day;
+        }
+
+        return  $today;
+    }
+}
+
 
 /*
  * Global helpers file with misc functions.

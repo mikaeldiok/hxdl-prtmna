@@ -42,7 +42,7 @@
 *
 * --------------------------------------------------------------------
 */
-Route::group(['namespace' => '\Modules\Vehicle\Http\Controllers\Frontend', 'as' => 'frontend.', 'middleware' => ['web','auth'], 'prefix' => ''], function () {
+Route::group(['namespace' => '\Modules\Vehicle\Http\Controllers\Frontend', 'as' => 'frontend.', 'middleware' => ['web'], 'prefix' => ''], function () {
 
     /*
      *
@@ -53,8 +53,7 @@ Route::group(['namespace' => '\Modules\Vehicle\Http\Controllers\Frontend', 'as' 
     $module_name = 'tankers';
     $controller_name = 'TankersController';        
     Route::get("$module_name/catalog", ['as' => "$module_name.index", 'uses' => "$controller_name@indexPaginated"]);
-    Route::get("$module_name/catalog/filter", ['as' => "$module_name.filterTankers", 'uses' => "$controller_name@filterTankers"]);
-    Route::get("$module_name/{id}-{tankerId}", ['as' => "$module_name.show", 'uses' => "$controller_name@show"]);
+    Route::post("$module_name/get-tanker", ['as' => "$module_name.get-tanker", 'uses' => "$controller_name@getTanker"]);
 });
 
 /*

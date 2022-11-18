@@ -68,6 +68,7 @@ class Kernel extends HttpKernel
         'permission'         => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'admin_hider'        => \App\Http\Middleware\AdminHider::class,
+        'sync_with_today'    => \App\Http\Middleware\SyncWithToday::class,
     ];
 
     /**

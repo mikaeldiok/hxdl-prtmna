@@ -12,7 +12,8 @@ return [
     
     'trip' => [
         'title'             => 'Trip',
-        'inspections'        => 'Inspection',
+        'inspections'       => 'Inspection',
+        'days'              => 'Day'
     ],
 
     'blog' => [

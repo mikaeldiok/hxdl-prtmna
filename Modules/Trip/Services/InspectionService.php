@@ -4,7 +4,7 @@ namespace Modules\Trip\Services;
 
 use Modules\Trip\Entities\Core;
 use Modules\Trip\Entities\Inspection;
-use Modules\Recruiter\Entities\Booking;
+use Modules\Vehicle\Entities\Tanker;
 
 use Exception;
 use Carbon\Carbon;
@@ -180,11 +180,11 @@ class InspectionService{
     }
 
 
-    public function create(){
+    public function createPart1(){
 
        Log::info(label_case($this->module_title.' '.__function__).' | User:'.(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? '0').')');
         
-        $createOptions = [];
+        $createOptions = $this->prepareOptions();
 
         return (object) array(
             'error'=> false,            
@@ -447,28 +447,10 @@ class InspectionService{
 
     public static function prepareOptions(){
         
-        $raw_majors = Core::getRawData('major');
-        $majors = [];
-        foreach($raw_majors as $key => $value){
-            $majors += [$value => $value];
-        }
-
-        $skills_raw = Core::getRawData('skills');
-        $skills = [];
-        foreach($skills_raw as $value){
-            $skills += [$value => $value];
-        }
-
-        $certificate_raw= Core::getRawData('certificate');
-        $certificate = [];
-        foreach($certificate_raw as $value){
-            $certificate += [$value => $value];
-        }
+        $tankers = Tanker::pluck('nomor_polisi','id');
 
         $options = array(
-            'majors'         => $majors,
-            'skills'              => $skills,
-            'certificate'         => $certificate,
+            'tankers'         => $tankers,
         );
 
         return $options;

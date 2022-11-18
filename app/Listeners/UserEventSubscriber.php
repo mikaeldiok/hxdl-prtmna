@@ -35,15 +35,10 @@ class UserEventSubscriber
      */
     public function handleUserLogout($event)
     {
-        if(\Auth::guard('donator')->check()){
-            $user = $event->user;
-
-            Log::warning('Logout Success: '.$user->donator_name.', IP:'.request()->getClientIp());
-        }else{
             $user = $event->user;
     
             Log::warning('Logout Success. '.$user->name.', IP:'.request()->getClientIp());
-        }
+     
     }
 
     /**

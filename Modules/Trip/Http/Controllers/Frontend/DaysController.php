@@ -9,35 +9,35 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Log;
 use Auth;
-use Modules\Trip\Services\InspectionService;
+use Modules\Trip\Services\DayService;
 use Spatie\Activitylog\Models\Activity;
 
-class InspectionsController extends Controller
+class DaysController extends Controller
 {
-    protected $inspectionService;
+    protected $dayService;
 
-    public function __construct(InspectionService $inspectionService)
+    public function __construct(DayService $dayService)
     {
         // Page Title
-        $this->module_title = trans('menu.trip.inspections');
+        $this->module_title = trans('menu.trip.days');
 
         // module name
-        $this->module_name = 'inspections';
+        $this->module_name = 'days';
 
         // directory path of the module
-        $this->module_path = 'inspections';
+        $this->module_path = 'days';
 
         // module icon
         $this->module_icon = 'fas fa-user-tie';
 
         // module model name, path
-        $this->module_model = "Modules\Inspection\Entities\Inspection";
+        $this->module_model = "Modules\Day\Entities\Day";
 
-        $this->inspectionService = $inspectionService;
+        $this->dayService = $dayService;
     }
 
     /**
-     * Go to inspection homepage
+     * Go to day homepage
      *
      * @param Request $request
      * @param int     $id
@@ -55,7 +55,7 @@ class InspectionsController extends Controller
 
         $module_action = 'Index';
 
-        $inspections = $this->inspectionService->getAllInspections()->data;
+        $days = $this->dayService->getAllDays()->data;
 
         //determine connections
         $connection = config('database.default');
@@ -63,13 +63,13 @@ class InspectionsController extends Controller
        
         return view(
             "trip::frontend.$module_name.index",
-            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "inspections",'driver')
+            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "days",'driver')
         );
     }
 
 
     /**
-     * Go to inspection catalog
+     * Go to day catalog
      *
      * @param Request $request
      * @param int     $id
@@ -87,10 +87,10 @@ class InspectionsController extends Controller
 
         $module_action = 'Index';
 
-        $inspections = $this->inspectionService->getPaginatedInspections(20,$request)->data;
+        $days = $this->dayService->getPaginatedDays(20,$request)->data;
         
         if ($request->ajax()) {
-            return view("trip::frontend.$module_name.inspections-card-loader", ['inspections' => $inspections])->render();  
+            return view("trip::frontend.$module_name.days-card-loader", ['days' => $days])->render();  
         }
         
         //determine connections
@@ -99,19 +99,19 @@ class InspectionsController extends Controller
        
         return view(
             "trip::frontend.$module_name.index",
-            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "inspections",'driver')
+            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "days",'driver')
         );
     }
 
     /**
-     * Go to inspection catalog
+     * Go to day catalog
      *
      * @param Request $request
      * @param int     $id
      *
      * @return Response
      */
-    public function filterInspections(Request $request)
+    public function filterDays(Request $request)
     {
         $module_title = $this->module_title;
         $module_name = $this->module_name;
@@ -122,24 +122,24 @@ class InspectionsController extends Controller
 
         $module_action = 'Index';
 
-        $inspections = $this->inspectionService->filterInspections(20,$request)->data;
+        $days = $this->dayService->filterDays(20,$request)->data;
         
         if ($request->ajax()) {
-            return view("trip::frontend.$module_name.inspections-card-loader", ['inspections' => $inspections])->render();  
+            return view("trip::frontend.$module_name.days-card-loader", ['days' => $days])->render();  
         }
         
     }
 
 
     /**
-     * Show inspection details
+     * Show day details
      *
      * @param Request $request
      * @param int     $id
      *
      * @return Response
      */
-    public function show($id,$inspectionId)
+    public function show($id,$dayId)
     {
         $module_title = $this->module_title;
         $module_name = $this->module_name;
@@ -150,7 +150,7 @@ class InspectionsController extends Controller
 
         $module_action = 'Index';
 
-        $inspection = $this->inspectionService->show($id)->data;
+        $day = $this->dayService->show($id)->data;
         
         
         //determine connections
@@ -159,35 +159,7 @@ class InspectionsController extends Controller
        
         return view(
             "trip::frontend.$module_name.show",
-            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "inspection",'driver')
-        );
-    }
-
-
-    /**
-     * Show inspection details
-     *
-     * @param Request $request
-     * @param int     $id
-     *
-     * @return Response
-     */
-    public function createPart1(Request $request)
-    {
-        $module_title = $this->module_title;
-        $module_name = $this->module_name;
-        $module_path = $this->module_path;
-        $module_icon = $this->module_icon;
-        $module_model = $this->module_model;
-        $module_name_singular = Str::singular($module_name);
-
-        $module_action = 'Create';
-
-        $options = $this->inspectionService->createPart1()->data;
-
-        return view(
-            "trip::frontend.$module_name.create-part-1",
-            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', 'options')
+            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "day",'driver')
         );
     }
 }

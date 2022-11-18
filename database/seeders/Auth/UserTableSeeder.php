@@ -102,10 +102,40 @@ class UserTableSeeder extends Seeder
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
             ],
+            [
+                'first_name'        => 'Pengawas',
+                'last_name'         => 'Pengawas',
+                'name'              => 'Pengawas',
+                'email'             => 'pengawas@example.com',
+                'password'          => Hash::make('secret'),
+                'username'          => '100006',
+                'mobile'            => $faker->phoneNumber,
+                'date_of_birth'     => $faker->date,
+                'avatar'            => 'img/default-avatar.jpg',
+                'gender'            => $faker->randomElement(['Male', 'Female', 'Other']),
+                'email_verified_at' => Carbon::now(),
+                'created_at'        => Carbon::now(),
+                'updated_at'        => Carbon::now(),
+            ],
+            [
+                'first_name'        => 'Hss',
+                'last_name'         => 'Hss',
+                'name'              => 'Hss',
+                'email'             => 'hss@example.com',
+                'password'          => Hash::make('secret'),
+                'username'          => '100007',
+                'mobile'            => $faker->phoneNumber,
+                'date_of_birth'     => $faker->date,
+                'avatar'            => 'img/default-avatar.jpg',
+                'gender'            => $faker->randomElement(['Male', 'Female', 'Other']),
+                'email_verified_at' => Carbon::now(),
+                'created_at'        => Carbon::now(),
+                'updated_at'        => Carbon::now(),
+            ],
         ];
 
         foreach ($users as $user_data) {
-            $user = User::create($user_data);
+            $user = User::Create($user_data);
 
             event(new UserCreated($user));
         }

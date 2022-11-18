@@ -13,6 +13,7 @@ return [
     'trip' => [
         'title'             => 'Pre Trip Insepction',
         'inspections'       => 'Inspection',
+        'days'               => 'Hari'
     ],
 
     'blog' => [

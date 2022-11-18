@@ -41,6 +41,18 @@ class GenerateMenus
                 'class' => 'c-sidebar-nav-link',
             ]);
 
+            $menu->add('<i class="fas fa-graduation-cap c-sidebar-nav-icon"></i> '.trans('menu.trip.days'), [
+                'route' => 'backend.days.index',
+                'class' => 'c-sidebar-nav-item',
+            ])
+            ->data([
+                'order' => 5,
+                'activematches' => ['admin/days*'],
+                'permission' => ['view_days'],
+            ])
+            ->link->attr([
+                'class' => 'c-sidebar-nav-link',
+            ]);
         })->sortBy('order');
 
         return $next($request);

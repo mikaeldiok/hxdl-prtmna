@@ -130,6 +130,33 @@ class TankersController extends Controller
         
     }
 
+    /**
+     * Show tanker details
+     *
+     * @param Request $request
+     * @param int     $id
+     *
+     * @return Response
+     */
+    public function getTanker(Request $request)
+    {
+        $module_title = $this->module_title;
+        $module_name = $this->module_name;
+        $module_path = $this->module_path;
+        $module_icon = $this->module_icon;
+        $module_model = $this->module_model;
+        $module_name_singular = Str::singular($module_name);
+
+        $module_action = 'Index';
+
+        $tanker = $this->tankerService->get_tanker($request->input('id'))->data;
+       
+        return view(
+            "vehicle::frontend.$module_name.tanker-show",
+            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "tanker")
+        );
+    }
+
 
     /**
      * Show tanker details
