@@ -162,8 +162,27 @@ class TankerService{
         return (object) array(
             'error'=> false,            
             'message'=> '',
+            'noExpired' => $this->checkNoExpired($tanker),
             'data'=> $tanker,
         );
+    }
+
+    public function checkNoExpired($tanker){
+        $attributes = ["exp_stnk","exp_keur","exp_tera","exp_kip","exp_kip","end_date_mt"];
+
+        foreach($attributes as $attribute){
+            
+
+            $the_date = Carbon::parse($tanker->$attribute);
+            $today = Carbon::today();
+            $diff = $today->diffInDays($the_date);
+            
+            if($the_date < $today){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function getList(){

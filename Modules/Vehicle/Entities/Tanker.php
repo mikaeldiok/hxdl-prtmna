@@ -3,6 +3,7 @@
 namespace Modules\Vehicle\Entities;
 
 use App\Models\BaseModel;
+use Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -27,4 +28,5 @@ class Tanker extends BaseModel
     {
         return \Modules\Vehicle\Database\factories\TankerFactory::new();
     }
+
 }

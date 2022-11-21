@@ -157,6 +157,29 @@ class TankersController extends Controller
         );
     }
 
+    /**
+     * Show tanker details
+     *
+     * @param Request $request
+     * @param int     $id
+     *
+     * @return Response
+     */
+    public function checkNoExpired(Request $request)
+    {
+        $module_title = $this->module_title;
+        $module_name = $this->module_name;
+        $module_path = $this->module_path;
+        $module_icon = $this->module_icon;
+        $module_model = $this->module_model;
+        $module_name_singular = Str::singular($module_name);
+
+        $module_action = 'Index';
+
+        $noExpired = $this->tankerService->get_tanker($request->input('id'))->noExpired;
+       
+        return $noExpired;
+    }
 
     /**
      * Show tanker details

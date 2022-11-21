@@ -82,7 +82,26 @@ $("#tanker_id").on('change', function(e) {
         },
         success: function (data) {
             $('#show-tanker').html(data);
-            $("#inspection_form").show();
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            Swal.fire("@lang('delete error')", "@lang('error')", "error");
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        url: '{{route("frontend.tankers.checkNoExpired")}}',
+        data: {
+            "_method":"POST",
+            "_token": "{{ csrf_token() }}",
+            "id": data.id
+        },
+        success: function (data) {
+            if(data){
+                $("#inspection_form").show();
+            }else{
+                $("#inspection_form").hide();
+            }
         },
         error: function (xhr, ajaxOptions, thrownError) {
             Swal.fire("@lang('delete error')", "@lang('error')", "error");

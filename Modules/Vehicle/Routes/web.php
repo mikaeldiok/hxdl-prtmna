@@ -54,6 +54,7 @@ Route::group(['namespace' => '\Modules\Vehicle\Http\Controllers\Frontend', 'as' 
     $controller_name = 'TankersController';        
     Route::get("$module_name/catalog", ['as' => "$module_name.index", 'uses' => "$controller_name@indexPaginated"]);
     Route::post("$module_name/get-tanker", ['as' => "$module_name.get-tanker", 'uses' => "$controller_name@getTanker"]);
+    Route::post("$module_name/checkNoExpired", ['as' => "$module_name.checkNoExpired", 'uses' => "$controller_name@checkNoExpired"]);
 });
 
 /*
