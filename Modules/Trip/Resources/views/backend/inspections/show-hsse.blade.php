@@ -34,7 +34,7 @@
                 @include('trip::backend.inspections.inspection-show-header')
                 @include('vehicle::frontend.tankers.tanker-show')
                 @include('trip::backend.inspections.inspection-show-content')
-                @include('trip::backend.inspections.create-approval')
+                @include('trip::backend.inspections.show-approval')
         </div>
     </div>
 

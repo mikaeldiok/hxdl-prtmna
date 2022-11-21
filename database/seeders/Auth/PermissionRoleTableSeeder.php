@@ -27,7 +27,7 @@ class PermissionRoleTableSeeder extends Seeder
         $manager = Role::firstOrCreate(['name' => 'manager']);
         $executive = Role::firstOrCreate(['name' => 'executive']);
         $pengawas = Role::firstOrCreate(['name' => 'pengawas']);
-        $hss = Role::firstOrCreate(['name' => 'hss']);
+        $hsse = Role::firstOrCreate(['name' => 'hsse']);
         $user = Role::firstOrCreate(['name' => 'user']);
 
         // Create Permissions
@@ -84,7 +84,7 @@ class PermissionRoleTableSeeder extends Seeder
         $executive->givePermissionTo('view_backend');
 
         $this->pengawasPermission($pengawas);
-        $this->hssPermission($hss);
+        $this->hssPermission($hsse);
 
 
         Schema::enableForeignKeyConstraints();
@@ -105,11 +105,11 @@ class PermissionRoleTableSeeder extends Seeder
         ]);
     }
 
-    private function hssPermission($hss){
+    private function hssPermission($hsse){
 
         Permission::firstOrCreate(['name' => 'approve_by_hss']);
 
-        $hss->givePermissionTo([
+        $hsse->givePermissionTo([
             'view_backend',
             'approve_by_hss',
             'view_inspections',

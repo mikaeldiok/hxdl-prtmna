@@ -18,6 +18,11 @@ class Tanker extends BaseModel
     protected static $logOnlyDirty = true;
     protected static $logAttributes = ['nomor_polisi', 'id'];
 
+    public function inspections()
+    {
+        return $this->hasMany('Modules\Trip\Entities\Inspection');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Vehicle\Database\factories\TankerFactory::new();

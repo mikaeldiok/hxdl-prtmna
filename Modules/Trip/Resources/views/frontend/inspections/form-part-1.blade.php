@@ -82,6 +82,7 @@ $("#tanker_id").on('change', function(e) {
         },
         success: function (data) {
             $('#show-tanker').html(data);
+            $("#inspection_form").show();
         },
         error: function (xhr, ajaxOptions, thrownError) {
             Swal.fire("@lang('delete error')", "@lang('error')", "error");

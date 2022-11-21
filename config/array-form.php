@@ -1,6 +1,6 @@
 <?php
 
-return [ "section" =>
+return [ 
     [
         "section"	=> "Perlengkapan Mobil Tangki",
         "no"		=> 1,

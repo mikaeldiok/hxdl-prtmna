@@ -11,7 +11,7 @@ return [
     ],
 
     'trip' => [
-        'title'             => 'Pre Trip Insepction',
+        'title'             => 'Pre Trip Inspection',
         'inspections'       => 'Inspection',
         'days'               => 'Hari'
     ],

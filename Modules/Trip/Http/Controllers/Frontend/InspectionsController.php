@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Log;
 use Auth;
+use Flash;
 use Modules\Trip\Services\InspectionService;
 use Spatie\Activitylog\Models\Activity;
 
@@ -189,5 +190,93 @@ class InspectionsController extends Controller
             "trip::frontend.$module_name.create-part-1",
             compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', 'options')
         );
+    }
+
+    /**
+     * Show inspection details
+     *
+     * @param Request $request
+     * @param int     $id
+     *
+     * @return Response
+     */
+    public function createPart2(Request $request)
+    {
+        $module_title = $this->module_title;
+        $module_name = $this->module_name;
+        $module_path = $this->module_path;
+        $module_icon = $this->module_icon;
+        $module_model = $this->module_model;
+        $module_name_singular = Str::singular($module_name);
+
+        $module_action = 'Create';
+
+        $options = $this->inspectionService->createPart1()->data;
+
+        return view(
+            "trip::frontend.$module_name.create-part-2",
+            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', 'options')
+        );
+    }
+
+
+    /**
+     * Show inspection details
+     *
+     * @param Request $request
+     * @param int     $id
+     *
+     * @return Response
+     */
+    public function storeInspection(Request $request)
+    {
+        $module_title = $this->module_title;
+        $module_name = $this->module_name;
+        $module_path = $this->module_path;
+        $module_icon = $this->module_icon;
+        $module_model = $this->module_model;
+        $module_name_singular = Str::singular($module_name);
+
+        $module_action = 'Create';
+
+        $inspections = $this->inspectionService->store($request);
+
+        $id = $inspections->data->id;
+
+        return view(
+            "trip::frontend.$module_name.create-part-2",
+            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action','id')
+        );
+    }
+
+
+    /**
+     * Show inspection details
+     *
+     * @param Request $request
+     * @param int     $id
+     *
+     * @return Response
+     */
+    public function storeInspectionPart2(Request $request)
+    {
+        $module_title = $this->module_title;
+        $module_name = $this->module_name;
+        $module_path = $this->module_path;
+        $module_icon = $this->module_icon;
+        $module_model = $this->module_model;
+        $module_name_singular = Str::singular($module_name);
+
+        $module_action = 'Create';
+
+        $inspections = $this->inspectionService->storePart2($request);
+
+        if(!$inspections->error){
+            Flash::success('<i class="fas fa-check"></i> '.label_case($module_name_singular).' Data Added Successfully!')->important();
+        }else{
+            Flash::error("<i class='fas fa-times-circle'></i> Error When ".$module_action." '".Str::singular($module_title)."'")->important();
+        }
+
+        return redirect("/");
     }
 }

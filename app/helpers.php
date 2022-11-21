@@ -21,18 +21,6 @@ if (!function_exists('app_name')) {
     }
 }
 
-if (!function_exists('getToday')) {
-    function getToday(){
-        $today = Day::where('date',Carbon::today())->first();
-
-        if($today){
-            return $today;
-        }
-
-        return false;
-    }
-}
-
 if (!function_exists('syncToday')) {
     function syncToday($pengawas){
         DB::beginTransaction();
@@ -77,27 +65,38 @@ if (!function_exists('syncToday')) {
     }
 }
 
-/*
- * Global helpers file with misc functions.
- */
-if (!function_exists('get_today')) {
-    /**
-     * Helper to grab the application name.
-     *
-     * @return mixed
-     */
-    function get_today()
-    {
+if (!function_exists('checkToday')) {
+    function checkToday(){
         $today = Day::where('date',Carbon::today())->first();
 
-        if(!$today){
-            $today = new Day;
+        if($today){
+            return $today;
+        }else{
+            return false;
         }
-
-        return  $today;
     }
 }
 
+if (!function_exists('getToday')) {
+    function getToday(){
+        $today = Day::where('date',Carbon::today())->first();
+
+        if($today){
+            return $today;
+        }else{
+            $todayObject = new Day;
+            $todayObject->date = Carbon::today();
+            $todayObject->pengawas = null;
+            $todayObject->hsse = null;
+
+            $todayArray = $todayObject->toArray();
+
+            $today = Day::create($todayArray);
+
+            return $today;
+        }
+    }
+}
 
 /*
  * Global helpers file with misc functions.

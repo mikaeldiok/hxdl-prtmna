@@ -55,63 +55,6 @@ class DayService{
         );
     }
 
-    public function filterDays($pagination,$request){
-
-        $day =Day::query()->available();
-
-        if(count($request->all()) > 0){
-            if($request->has('major')){
-                $day->whereIn('major', $request->input('major'));
-            }
-
-            if($request->has('year_class')){
-                $day->whereIn('year_class', $request->input('year_class'));
-            }
-
-            if($request->has('height')){
-                $day->where('height', ">=", (float)$request->input('height'));
-            }
-
-            if($request->has('weight')){
-                $day->where('weight', ">=", (float)$request->input('weight'));
-            }
-
-            if($request->has('skills')){
-                $day->where(function ($query) use ($request){
-                    $checkSkills = $request->input('skills');
-                    foreach($checkSkills as $skill){
-                        if($request->input('must_have_all_skills')){
-                            $query->where('skills', 'like','%'.$skill.'%');
-                        }else{
-                            $query->orWhere('skills', 'like','%'.$skill.'%');
-                        }
-                    }
-                });
-            }
-
-            if($request->has('certificate')){
-                $day->where(function ($query) use ($request){
-                    $checkCerts = $request->input('certificate');
-                    foreach($checkCerts as $cert){
-                        if($request->input('must_have_all_certificate')){
-                            $query->where('certificate', 'like','%'.$cert.'%');
-                        }else{
-                            $query->orWhere('certificate', 'like','%'.$cert.'%');
-                        }
-                    }
-                });
-            }
-        }
-
-        $day = $day->paginate($pagination);
-        
-        return (object) array(
-            'error'=> false,            
-            'message'=> '',
-            'data'=> $day,
-        );
-    }
-
     public function getPaginatedDays($pagination,$request){
 
         $day =Day::query()->available();
@@ -264,6 +207,50 @@ class DayService{
         DB::commit();
 
         Log::info(label_case($this->module_title.' '.__function__)." | '".$day->name.'(ID:'.$day->id.") ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
+
+        return (object) array(
+            'error'=> false,            
+            'message'=> '',
+            'data'=> $today,
+        );
+    }
+
+    public function proccessNameHss(Request $request){
+        $data = $request->all();
+
+        DB::beginTransaction();
+
+        try {
+            $today = Day::where('date',Carbon::today())->first();
+
+            if($today){
+                $today->hsse = $data['hsse'];
+                $today->save();
+
+            }else{
+                $todayObject = new Day;
+                $todayObject->date = Carbon::today();
+                $todayObject->hsse = $data['hsse'];
+
+                $todayArray = $todayObject->toArray();
+
+                $today = Day::create($todayArray);
+            }
+
+            
+        }catch (Exception $e){
+            DB::rollBack();
+            Log::critical(label_case($this->module_title.' ON LINE '.__LINE__.' AT '.Carbon::now().' | Function:'.__FUNCTION__).' | msg: '.$e->getMessage());
+            return (object) array(
+                'error'=> true,
+                'message'=> $e->getMessage(),
+                'data'=> null,
+            );
+        }
+
+        DB::commit();
+
+        Log::info(label_case($this->module_title.' '.__function__)." | '".$today->name.'(ID:'.$today->id.") ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
 
         return (object) array(
             'error'=> false,            

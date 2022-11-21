@@ -23,28 +23,43 @@
                     @lang(":module_name Management Dashboard", ['module_name'=>Str::title($module_name)])
                 </div>
             </div>
+            <!--/.col-->
         </div>
         <!--/.row-->
 
+        <hr>
 
-        <!-- Tab panes -->
+        <div class="row mt-4">
+            <div class="col">
+                {{ html()->form('POST', route("backend.$module_name.hssLoginProccess"))->class('form')->attributes(['enctype'=>"multipart/form-data"])->open() }}
 
-        <div class="mt-4">
-            <hr>
-                @include('trip::backend.inspections.inspection-show-header')
-                @include('vehicle::frontend.tankers.tanker-show')
-                @include('trip::backend.inspections.inspection-show-content')
-                @include('trip::backend.inspections.create-approval')
+                @include ("trip::backend.$module_name.form-name-hsse")
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            {{ html()->button($text = "<i class='fas fa-plus-circle'></i> " . ucfirst($module_action) . "", $type = 'submit')->class('btn btn-success') }}
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="float-right">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-warning" onclick="history.back(-1)"><i class="fas fa-reply"></i> Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{ html()->form()->close() }}
+
+            </div>
         </div>
     </div>
 
     <div class="card-footer">
         <div class="row">
             <div class="col">
-                <small class="float-right text-muted">
-                    Updated: {{$$module_name_singular->updated_at->diffForHumans()}},
-                    Created at: {{$$module_name_singular->created_at->isoFormat('LLLL')}}
-                </small>
+
             </div>
         </div>
     </div>

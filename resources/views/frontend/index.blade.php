@@ -42,8 +42,8 @@
           <div class="media block-6">
             <div class="icon text-warning"><span class="ion-ios-contacts"></span></div>
             <div class="media-body text-danger">
-              <h3 class="heading">HSS</h3>
-              <h5 class="text-black">user: hss@example.com</h5>
+              <h3 class="heading">HSSE</h3>
+              <h5 class="text-black">user: hsse@example.com</h5>
               <h5>pass: secret</h5>
               <p><a href="{{route('login')}}" class="link-underline">Login here</a></p>
             </div>

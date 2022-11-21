@@ -17,6 +17,7 @@ class CreateDaysTable extends Migration
             $table->id();
             $table->date('date');
             $table->string('pengawas')->nullable();
+            $table->string('hsse')->nullable();
             $table->timestamps();
             $table->integer('created_by')->unsigned()->nullable();
             $table->integer('updated_by')->unsigned()->nullable();

@@ -26,7 +26,7 @@ class UserRoleTableSeeder extends Seeder
         User::findOrFail(4)->assignRole('executive');
         User::findOrFail(5)->assignRole('user');
         User::findOrFail(6)->assignRole('pengawas');
-        User::findOrFail(7)->assignRole('hss');
+        User::findOrFail(7)->assignRole('hsse');
 
         Schema::enableForeignKeyConstraints();
     }

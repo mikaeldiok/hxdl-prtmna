@@ -19,13 +19,27 @@
 
         <!-- Dashboard Content Area -->
         @php
-            $day = get_today();
+            $checkDay = checkToday();
         @endphp
         <div class="row">
             <div class="col-sm-8">
-                Pengawas: {{$day->pengawas ?? "Pengawas belum memasukkan nama, jika anda pengawas silakan klik link berikut untuk mengisi nama: "}} 
-                @if(!$day->pengawas)
-                    <a href='{{route("backend.days.pengawasLogin")}}'>ISI NAMA PENGAWAS</a>
+                @if($checkDay)
+                    @php
+                        $day = getToday();
+                    @endphp
+                    @if(!$day->pengawas && Auth::user()->hasRole('pengawas'))
+                        Pengawas: {{$day->pengawas ?? "Pengawas belum memasukkan nama, jika anda pengawas silakan klik link berikut untuk mengisi nama: "}} 
+                        <a href='{{route("backend.days.pengawasLogin")}}'>ISI NAMA PENGAWAS</a>
+                    @else
+                        Pengawas: {{$day->pengawas ?? "Pengawas belum memasukkan nama"}} 
+                    @endif
+                    <br>
+                    @if(!$day->hsse && Auth::user()->hasRole('hsse'))
+                        HSSE: {{$day->hsse ?? "HSSE belum memasukkan nama, jika anda hsse silakan klik link berikut untuk mengisi nama: "}} 
+                        <a href='{{route("backend.days.hssLogin")}}'>ISI NAMA HSSE</a>
+                    @else
+                        HSSE: {{$day->hsse ?? "HSSE belum memasukkan nama"}} 
+                    @endif
                 @endif
             </div>
         </div>

@@ -18,17 +18,9 @@
 
                 <div class="row mt-4">
                     <div class="col">
-                    {{ html()->form('POST', route("frontend.$module_name.store-inspection"))->class('form')->attributes(['enctype'=>"multipart/form-data"])->open() }}
+                    {{ html()->form('POST', route("frontend.$module_name.store-inspection-part2"))->class('form')->attributes(['enctype'=>"multipart/form-data"])->open() }}
 
-                        @include ("trip::frontend.$module_name.form-part-1")
-                        
-                        <div id="show-tanker">
-
-                        </div>
-          
-                        <div id="inspection_form">
-                            @include ("trip::frontend.$module_name.form-part-1b")
-                        </div>
+                        @include ("trip::frontend.$module_name.form-part-2")
 
                         <div class="row">
                             <div class="col-6">

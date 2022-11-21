@@ -4,6 +4,7 @@ namespace Modules\Trip\Services;
 
 use Modules\Trip\Entities\Core;
 use Modules\Trip\Entities\Inspection;
+use Modules\Trip\Entities\Day;
 use Modules\Vehicle\Entities\Tanker;
 
 use Exception;
@@ -195,36 +196,67 @@ class InspectionService{
 
     public function store(Request $request){
 
-        $data = $request->all();
+        $rawdata = $request->all();
         DB::beginTransaction();
 
         try {
             
             $inspectionObject = new Inspection;
-            $inspectionObject->fill($data);
+            $inspectionObject->fill($rawdata);
+            
+            $inspectionObject->status = "OFF";
 
-            if($inspectionObject->tahun_registrasi){
-                $inspectionObject->tahun_registrasi = convert_slash_to_basic_date($inspectionObject->tahun_registrasi);
-            }
-            if($inspectionObject->exp_stnk){
-                $inspectionObject->exp_stnk = convert_slash_to_basic_date($inspectionObject->exp_stnk);
-            }
-            if($inspectionObject->exp_keur){
-                $inspectionObject->exp_keur = convert_slash_to_basic_date($inspectionObject->exp_keur);
-            }
-            if($inspectionObject->exp_tera){
-                $inspectionObject->exp_tera = convert_slash_to_basic_date($inspectionObject->exp_tera);
-            }
-            if($inspectionObject->exp_kip){
-                $inspectionObject->exp_kip = convert_slash_to_basic_date($inspectionObject->exp_kip);
-            }
-            if($inspectionObject->end_date_mt){
-                $inspectionObject->end_date_mt = convert_slash_to_basic_date($inspectionObject->end_date_mt);
-            }
+            $data = collect($rawdata);
 
+            $inspection_array_value = $data->filter(function ($value, $key) {
+                                    return str_contains($key,"array_value") ;
+                                })->all();
+
+            $inspection_array_value_true = collect($inspection_array_value)->filter(function ($value, $key) {
+                                                return $value > 0 ;
+                                            })->all();
+
+            $inspection_array_photo_raw = $data->filter(function ($value, $key) {
+                                                return str_contains($key,"array_photo") ;
+                                            })->all();
+            
+            $percentage_raw = count($inspection_array_value_true) / count($inspection_array_value);
+            $inspectionObject->pretrip_percentage = round($percentage_raw, 2);
+
+            $inspectionObject->day_id = getToday()->id;
+
+            $inspection_array_photo = [];
+            
             $inspectionObjectArray = $inspectionObject->toArray();
 
             $inspection = Inspection::create($inspectionObjectArray);
+
+            foreach($inspection_array_photo_raw as $key => $item){
+
+                $media = $inspection->addMedia($item)->toMediaCollection($this->module_name);
+
+                $inspection_array_photo += [$key => $media->getUrl()];
+
+            }
+
+            if ($request->hasFile('photo_odometer')) {
+                if ($inspection->getMedia($this->module_name)->first()) {
+                    $inspection->getMedia($this->module_name)->first()->delete();
+                }
+    
+                $media = $inspection->addMedia($request->file('photo_odometer'))->toMediaCollection($this->module_name);
+
+                $inspection->photo_odometer = $media->getUrl();
+
+                $inspection->save();
+            }
+            
+            $inspection_array = array_merge($inspection_array_value, $inspection_array_photo);
+
+            $inspection->inspection_array = json_encode($inspection_array);
+
+            $inspection->save();
+            
             
         }catch (Exception $e){
             DB::rollBack();
@@ -238,7 +270,7 @@ class InspectionService{
 
         DB::commit();
 
-        Log::info(label_case($this->module_title.' '.__function__)." | '".$inspection->name.'(ID:'.$inspection->id.") ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
+        Log::info(label_case($this->module_title.' '.__function__)." | '".$inspection->name.'(ID:'.$inspection->id.") ' by User:".(Auth::user()->name ?? 'driver').'(ID:'.(Auth::user()->id ?? "0").')');
 
         return (object) array(
             'error'=> false,            
@@ -247,6 +279,89 @@ class InspectionService{
         );
     }
 
+    public function storePart2(Request $request){
+
+        $rawdata = $request->all();
+        DB::beginTransaction();
+
+        try {
+            
+            $inspection = Inspection::findOrFail($rawdata['id']);
+            $inspection->odometer = $rawdata['odometer'];
+            $inspection->tambahan = $rawdata['tambahan'];
+
+            $data = collect($rawdata);
+
+            $inspection_array_value = $data->filter(function ($value, $key) {
+                                    return str_contains($key,"array_value") ;
+                                })->all();
+
+            $inspection_array_value_true = collect($inspection_array_value)->filter(function ($value, $key) {
+                                                return $value > 0 ;
+                                            })->all();
+
+            $inspection_array_photo_raw = $data->filter(function ($value, $key) {
+                                                return str_contains($key,"array_photo") ;
+                                            })->all();
+        
+            $inspection_array_photo = [];
+
+            $inspection->save();
+
+            foreach($inspection_array_photo_raw as $key => $item){
+
+                $media = $inspection->addMedia($item)->toMediaCollection($this->module_name);
+
+                $inspection_array_photo += [$key => $media->getUrl()];
+
+            }
+
+            if ($request->hasFile('photo_odometer')) {
+                if ($inspection->getMedia($this->module_name)->first()) {
+                    $inspection->getMedia($this->module_name)->first()->delete();
+                }
+    
+                $media = $inspection->addMedia($request->file('photo_odometer'))->toMediaCollection($this->module_name);
+
+                $inspection->photo_odometer = $media->getUrl();
+
+                $inspection->save();
+            }
+            
+            $inspection_array = array_merge($inspection_array_value, $inspection_array_photo);
+
+            \Log::debug("iaprev".$inspection->inspection_array);
+
+            $old_inspection = json_decode($inspection->inspection_array,true);
+
+            \Log::debug("ia".json_encode($inspection_array));
+            \Log::debug("oi".json_encode($old_inspection));
+
+            $inspection->inspection_array = array_merge($old_inspection, $inspection_array);
+
+            $inspection->save();
+            
+            
+        }catch (Exception $e){
+            DB::rollBack();
+            Log::critical(label_case($this->module_title.' ON LINE '.__LINE__.' AT '.Carbon::now().' | Function:'.__FUNCTION__).' | msg: '.$e->getMessage());
+            return (object) array(
+                'error'=> true,
+                'message'=> $e->getMessage(),
+                'data'=> null,
+            );
+        }
+
+        DB::commit();
+
+        Log::info(label_case($this->module_title.' '.__function__)." | '".$inspection->name.'(ID:'.$inspection->id.") ' by User:".(Auth::user()->name ?? 'driver').'(ID:'.(Auth::user()->id ?? "0").')');
+
+        return (object) array(
+            'error'=> false,            
+            'message'=> '',
+            'data'=> $inspection,
+        );
+    }
     public function show($id, $inspectionId = null){
 
         Log::info(label_case($this->module_title.' '.__function__).' | User:'.(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
@@ -262,12 +377,56 @@ class InspectionService{
 
         $inspection = Inspection::findOrFail($id);
 
-        Log::info(label_case($this->module_title.' '.__function__)." | '".$inspection->name.'(ID:'.$inspection->id.") ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
+        Log::info(label_case($this->module_title.' '.__function__)." | '".$inspection->name.'(ID:'.$inspection->id.") ' by User:".(Auth::user()->name ?? 'driver').'(ID:'.(Auth::user()->id ?? "0").')');
 
         return (object) array(
             'error'=> false,            
             'message'=> '',
             'data'=> $inspection,
+        );
+    }
+
+    public function approvePengawas(Request $request,$id){
+
+        $data = $request->all();
+
+        DB::beginTransaction();
+
+        try{
+
+            $inspectionObject = Inspection::findOrFail($id);
+
+            $inspectionObject->jenis_pekerjaan_penyelesaian = $data['jenis_pekerjaan_penyelesaian'];
+            $inspectionObject->keterangan_penyelesaian = $data['keterangan_penyelesaian'];
+            $inspectionObject->estimasi_penyelesaian = convert_slash_to_basic_date($data['jenis_pekerjaan_penyelesaian']);
+            $inspectionObject->verify_by_pengawas = 1;
+
+            \Log::debug($inspectionObject);
+            
+            $inspectionObject->save();
+
+            $updated_inspection = $inspectionObject;
+
+
+        }catch (Exception $e){
+            DB::rollBack();
+            report($e);
+            Log::critical(label_case($this->module_title.' AT '.Carbon::now().' | Function:'.__FUNCTION__).' | Msg: '.$e->getMessage());
+            return (object) array(
+                'error'=> true,
+                'message'=> $e->getMessage(),
+                'data'=> null,
+            );
+        }
+
+        DB::commit();
+
+        Log::info(label_case($this->module_title.' '.__FUNCTION__)." | '".$updated_inspection->name.'(ID:'.$updated_inspection->id.") ' by User:".(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
+
+        return (object) array(
+            'error'=> false,            
+            'message'=> '',
+            'data'=> $updated_inspection,
         );
     }
 
@@ -281,26 +440,6 @@ class InspectionService{
 
             $inspectionObject = new Inspection;
             $inspectionObject->fill($data);
-            
-            if($inspectionObject->tahun_registrasi){
-                $inspectionObject->tahun_registrasi = convert_slash_to_basic_date($inspectionObject->tahun_registrasi);
-            }
-            if($inspectionObject->exp_stnk){
-                $inspectionObject->exp_stnk = convert_slash_to_basic_date($inspectionObject->exp_stnk);
-            }
-            if($inspectionObject->exp_keur){
-                $inspectionObject->exp_keur = convert_slash_to_basic_date($inspectionObject->exp_keur);
-            }
-            if($inspectionObject->exp_tera){
-                $inspectionObject->exp_tera = convert_slash_to_basic_date($inspectionObject->exp_tera);
-            }
-            if($inspectionObject->exp_kip){
-                $inspectionObject->exp_kip = convert_slash_to_basic_date($inspectionObject->exp_kip);
-            }
-            if($inspectionObject->end_date_mt){
-                $inspectionObject->end_date_mt = convert_slash_to_basic_date($inspectionObject->end_date_mt);
-            }
-            
             $updating = Inspection::findOrFail($id)->update($inspectionObject->toArray());
 
             $updated_inspection = Inspection::findOrFail($id);

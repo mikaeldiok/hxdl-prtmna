@@ -37,6 +37,7 @@
     <!-- <x-preloader /> -->
 
     <main>
+        @include('flash::message')
         @yield('content')
     </main>
 

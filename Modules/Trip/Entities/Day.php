@@ -18,6 +18,11 @@ class Day extends BaseModel
     protected static $logOnlyDirty = true;
     protected static $logAttributes = ['tanker_id', 'day_id', 'id'];
 
+    public function inspections()
+    {
+        return $this->hasMany('Modules\Trip\Entities\Inspection');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Trip\Database\factories\DayFactory::new();

@@ -3,6 +3,7 @@
 namespace Modules\Trip\Http\Middleware;
 
 use Closure;
+use Carbon;
 
 class GenerateMenus
 {
@@ -20,7 +21,7 @@ class GenerateMenus
             //trip menu
 
             // Separator: Donasi
-            $menu->add('Pre Trip Insepction', [
+            $menu->add('Pre Trip Inspection', [
                 'class' => 'c-sidebar-nav-title',
             ])
             ->data([
@@ -28,7 +29,20 @@ class GenerateMenus
                 'permission'    => ['view_inspections'],
             ]);
 
-            $menu->add('<i class="fas fa-graduation-cap c-sidebar-nav-icon"></i> '.trans('menu.trip.inspections'), [
+            $menu->add('<i class="fas fa-truck c-sidebar-nav-icon"></i> '.trans('menu.trip.inspections')." Today", [
+                'route' => ['backend.inspections.index',('date='.date("Y-m-d"))],
+                'class' => 'c-sidebar-nav-item',
+            ])
+            ->data([
+                'order' => 5,
+                'activematches' => ['admin/inspections*'],
+                'permission' => ['view_inspections'],
+            ])
+            ->link->attr([
+                'class' => 'c-sidebar-nav-link',
+            ]);
+
+            $menu->add('<i class="fas fa-truck c-sidebar-nav-icon"></i> '.trans('menu.trip.inspections'), [
                 'route' => 'backend.inspections.index',
                 'class' => 'c-sidebar-nav-item',
             ])
@@ -41,7 +55,7 @@ class GenerateMenus
                 'class' => 'c-sidebar-nav-link',
             ]);
 
-            $menu->add('<i class="fas fa-graduation-cap c-sidebar-nav-icon"></i> '.trans('menu.trip.days'), [
+            $menu->add('<i class="fas fa-calendar c-sidebar-nav-icon"></i> '.trans('menu.trip.days'), [
                 'route' => 'backend.days.index',
                 'class' => 'c-sidebar-nav-item',
             ])

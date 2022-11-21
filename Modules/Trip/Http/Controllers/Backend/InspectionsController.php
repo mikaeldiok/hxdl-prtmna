@@ -131,7 +131,7 @@ class InspectionsController extends Controller
 
         $module_action = 'Store';
 
-        $inspections = $this->inspectionService->store($request);
+        $inspections = $this->inspectionService->store($request,1);
 
         $$module_name_singular = $inspections->data;
 
@@ -165,6 +165,7 @@ class InspectionsController extends Controller
         $inspections = $this->inspectionService->show($id);
 
         $$module_name_singular = $inspections->data;
+        $tanker = $inspections->data->tanker;
 
         //determine connections
         $connection = config('database.default');
@@ -178,7 +179,46 @@ class InspectionsController extends Controller
 
         return view(
             "trip::backend.$module_name.show",
-            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "$module_name_singular",'activities','driver')
+            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "$module_name_singular",'activities','driver','tanker')
+        );
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function showHsse($id)
+    {
+        $module_title = $this->module_title;
+        $module_name = $this->module_name;
+        $module_path = $this->module_path;
+        $module_icon = $this->module_icon;
+        $module_model = $this->module_model;
+        $module_name_singular = Str::singular($module_name);
+
+        $module_action = 'Show';
+
+        $inspections = $this->inspectionService->show($id);
+
+        $$module_name_singular = $inspections->data;
+        $tanker = $inspections->data->tanker;
+
+        //determine connections
+        $connection = config('database.default');
+        $driver = config("database.connections.{$connection}.driver");
+
+        $activities = Activity::where('subject_type', '=', $module_model)
+            ->where('log_name', '=', $module_name)
+            ->where('subject_id', '=', $id)
+            ->latest()
+            ->paginate();
+
+        return view(
+            "trip::backend.$module_name.show-hsse",
+            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "$module_name_singular",'activities','driver','tanker')
         );
     }
 
@@ -229,10 +269,6 @@ class InspectionsController extends Controller
 
         $module_action = 'Update';
 
-        $this->validate($request, [
-            'photo'    => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-        
         $inspections = $this->inspectionService->update($request,$id);
 
         $$module_name_singular = $inspections->data;
@@ -245,6 +281,7 @@ class InspectionsController extends Controller
 
         return redirect("admin/$module_name");
     }
+
 
     /**
      * Remove the specified resource from storage.

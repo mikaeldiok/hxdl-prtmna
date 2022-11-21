@@ -54,7 +54,7 @@ class AuthenticatedSessionController extends Controller
 
             if($canViewBackend){
                 if( Auth::user()->hasRole('pengawas')){
-                    $today = getToday();
+                    $today = checkToday();
 
                     if($today){
                         if($today->pengawas){
@@ -65,7 +65,21 @@ class AuthenticatedSessionController extends Controller
                     }else{
                         return redirect()->route('backend.days.pengawasLogin');
                     }
+                }else if( Auth::user()->hasRole('hsse')){
+                    $today = checkToday();
+
+                    if($today){
+                        if($today->hsse){
+                            $redirectTo = '/admin';
+                        }else{
+                            return redirect()->route('backend.days.hssLogin');
+                        }
+                    }else{
+                        return redirect()->route('backend.days.hssLogin');
+                    }
                 }else{
+                    $redirectTo = '/admin';
+                }{
                     $redirectTo = '/admin';
                 }
             }else{

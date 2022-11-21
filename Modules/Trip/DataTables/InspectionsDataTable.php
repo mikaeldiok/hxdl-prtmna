@@ -3,6 +3,7 @@
 namespace Modules\Trip\DataTables;
 
 use Carbon\Carbon;
+use Auth;
 use Illuminate\Support\HtmlString;
 use Modules\Trip\Services\InspectionService;
 use Modules\Trip\Entities\Inspection;
@@ -36,6 +37,9 @@ class InspectionsDataTable extends DataTable
 
                 return view('backend.includes.action_column', compact('module_name', 'data'));
             })
+            ->editColumn('pretrip_percentage', function ($data) {
+                return ($data->pretrip_percentage * 100)."% OK";
+            })
             ->editColumn('updated_at', function ($data) {
                 $module_name = $this->module_name;
 
@@ -66,7 +70,13 @@ class InspectionsDataTable extends DataTable
     public function query()
     {
         $user = auth()->user();
-        $data = Inspection::query();
+        $data = Inspection::query()->with('tanker')->with('day');
+
+        if($this->request()->get('date')){
+            $data->whereHas('day', function($query){
+                $query->where('date', 'LIKE', "%".$this->request()->get('date')."%");
+            });
+        }
 
         return $this->applyScopes($data);
     }
@@ -107,54 +117,42 @@ class InspectionsDataTable extends DataTable
      */
     protected function getColumns()
     {
-        return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->addClass('text-center'),
-            Column::make('id')->hidden(),
-            Column::make('nomor_polisi')->title("nomor_polisi"),
-            Column::make('produk')->title("produk"),
-            Column::make('nama_perusahaan_transportir')->title("nama_perusahaan_transportir"),
-            Column::make('kategori_pengelola_mt')->title("kategori_pengelola_mt")->hidden(),
-            Column::make('tahun_registrasi')->title("tahun_registrasi")->hidden(),
-            Column::make('merk_kepala')->title("merk_kepala")->hidden(),
-            Column::make('type')->title("type"),
-            Column::make('nomor_mesin')->title("nomor_mesin")->hidden(),
-            Column::make('nomor_chassiss')->title("nomor_chassiss")->hidden(),
-            Column::make('konfigurasi_sumbu_roda')->title("konfigurasi_sumbu_roda")->hidden(),
-            Column::make('kategori')->title("kategori")->hidden(),
-            Column::make('status_sewa_tarif')->title("status_sewa_tarif")->hidden(),
-            Column::make('tujuan_angkutan')->title("tujuan_angkutan")->hidden(),
-            Column::make('kap')->title("kap")->hidden(),
-            Column::make('no_reg')->title("no_reg")->hidden(),
-
-            Column::make('exp_stnk')->title("exp_stnk")->hidden(),
-            Column::make('exp_keur')->title("exp_keur")->hidden(),
-            Column::make('exp_tera')->title("exp_tera")->hidden(),
-            Column::make('exp_kip')->title("exp_kip")->hidden(),
-
-            Column::make('end_date_mt')->title("end_date_mt")->hidden(),
-            Column::make('keterangan_kip')->title("keterangan_kip")->hidden(),
-            Column::make('keterangan_mt')->title("keterangan_mt")->hidden(),
-
-            Column::make('data_tm_k1_t1')->title("data_tm_k1_t1")->hidden(),
-            Column::make('data_tm_k1_t1')->title("data_tm_k1_t1")->hidden(),
-            Column::make('data_tm_k1_t1')->title("data_tm_k1_t1")->hidden(),
-
-            Column::make('data_tm_k2_t1')->title("data_tm_k2_t1")->hidden(),
-            Column::make('data_tm_k2_t1')->title("data_tm_k2_t1")->hidden(),
-            Column::make('data_tm_k2_t1')->title("data_tm_k2_t1")->hidden(),
-
-            Column::make('data_tm_k3_t1')->title("data_tm_k3_t1")->hidden(),
-            Column::make('data_tm_k3_t1')->title("data_tm_k3_t1")->hidden(),
-            Column::make('data_tm_k3_t1')->title("data_tm_k3_t1")->hidden(),
-
-            Column::make('nomor_surat_tera')->title("nomor_surat_tera")->hidden(),
-            Column::make('keterangan')->title("keterangan")->hidden(),
-            Column::make('created_at'),
-            Column::make('updated_at')->hidden(),
-        ];
+        if(Auth::user()->hasRole("hsse")){
+            return [
+                Column::computed('action')
+                      ->exportable(false)
+                      ->printable(false)
+                      ->addClass('text-center'),
+                Column::make('id')->hidden(),
+                Column::make('tanker.nomor_polisi')->title("Nomor Polisi"),
+                Column::make('amt1')->title("AMT1"),
+                Column::make('amt2')->title("AMT2"),
+                Column::make('pretrip_percentage')->title("Hasil Pre Trip Inspection"),
+                Column::make('keterangan_penyelesaian')->title("Keterangan"),
+                Column::make('estimasi_penyelesaian')->title("Due Date"),
+                Column::make('verify_by_pengawas')->title("Check"),
+                Column::make('verify_by_hsse')->title("Gate In Approval"),
+                Column::make('created_at')->hidden(),
+                Column::make('updated_at')->hidden(),
+            ];
+        }else{
+            return [
+                Column::computed('action')
+                    ->exportable(false)
+                    ->printable(false)
+                    ->addClass('text-center'),
+                Column::make('id')->hidden(),
+                Column::make('tanker.nomor_polisi')->title("Nomor Polisi"),
+                Column::make('amt1')->title("AMT1"),
+                Column::make('amt2')->title("AMT2"),
+                Column::make('pretrip_percentage')->title("Hasil Pre Trip Inspection"),
+                Column::make('keterangan_penyelesaian')->title("Keterangan"),
+                Column::make('estimasi_penyelesaian')->title("Due Date"),
+                Column::make('verify_by_pengawas')->title("Check"),
+                Column::make('created_at')->hidden(),
+                Column::make('updated_at')->hidden(),
+            ];
+        }
     }
 
     /**
