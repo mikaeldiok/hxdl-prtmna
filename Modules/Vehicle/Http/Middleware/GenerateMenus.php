@@ -41,18 +41,6 @@ class GenerateMenus
                 'class' => 'c-sidebar-nav-link',
             ]);
 
-            $menu->add('<i class="fas fa-vehicle c-sidebar-nav-icon"></i> '.trans('menu.vehicle.cores'), [
-                'route' => 'backend.cores.index',
-                'class' => 'c-sidebar-nav-item',
-            ])
-            ->data([
-                'order' => 3,
-                'activematches' => ['admin/cores*'],
-                'permission' => ['view_cores'],
-            ])
-            ->link->attr([
-                'class' => 'c-sidebar-nav-link',
-            ]);
         })->sortBy('order');
 
         return $next($request);

@@ -2,7 +2,6 @@
     "Article": false,
     "Tag": false,
     "Comment": false,
-    "Core": true,
     "School": false,
     "Vehicle": true,
     "Trip": true
