@@ -120,7 +120,7 @@ class DayService{
             $dayObject = new Day;
             $dayObject->fill($data);
 
-            $dayObject->date = Carbon::today();
+            $dayObject->date = Carbon::today()->format('Y-m-d');
 
             $dayObjectArray = $dayObject->toArray();
 
@@ -177,7 +177,7 @@ class DayService{
         DB::beginTransaction();
 
         try {
-            $today = Day::where('date',Carbon::today())->first();
+            $today = Day::where('date',Carbon::today()->format('Y-m-d'))->first();
 
             if($today){
                 $today->pengawas = $data['pengawas'];
@@ -185,7 +185,7 @@ class DayService{
 
             }else{
                 $todayObject = new Day;
-                $todayObject->date = Carbon::today();
+                $todayObject->date = Carbon::today()->format('Y-m-d');
                 $todayObject->pengawas = $data['pengawas'];
 
                 $todayArray = $todayObject->toArray();
@@ -221,7 +221,7 @@ class DayService{
         DB::beginTransaction();
 
         try {
-            $today = Day::where('date',Carbon::today())->first();
+            $today = Day::where('date',Carbon::today()->format('Y-m-d'))->first();
 
             if($today){
                 $today->hsse = $data['hsse'];
@@ -229,7 +229,7 @@ class DayService{
 
             }else{
                 $todayObject = new Day;
-                $todayObject->date = Carbon::today();
+                $todayObject->date = Carbon::today()->format('Y-m-d');
                 $todayObject->hsse = $data['hsse'];
 
                 $todayArray = $todayObject->toArray();

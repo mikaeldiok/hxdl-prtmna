@@ -26,7 +26,7 @@ if (!function_exists('syncToday')) {
         DB::beginTransaction();
 
         try {
-            $today = Day::where('date',Carbon::today())->first();
+            $today = Day::where('date',Carbon::today()->format('Y-m-d'))->first();
 
             if($today){
                 $today->pengawas = $pengawas;
@@ -34,7 +34,7 @@ if (!function_exists('syncToday')) {
 
             }else{
                 $todayObject = new Day;
-                $todayObject->date = Carbon::today();
+                $todayObject->date = Carbon::today()->format('Y-m-d');
                 $todayObject->pengawas = $pengawas;
 
                 $todayArray = $todayObject->toArray();
@@ -67,7 +67,7 @@ if (!function_exists('syncToday')) {
 
 if (!function_exists('checkToday')) {
     function checkToday(){
-        $today = Day::where('date',Carbon::today())->first();
+        $today = Day::where('date',Carbon::today()->format('Y-m-d'))->first();
 
         if($today){
             return $today;
@@ -79,13 +79,13 @@ if (!function_exists('checkToday')) {
 
 if (!function_exists('getToday')) {
     function getToday(){
-        $today = Day::where('date',Carbon::today())->first();
+        $today = Day::where('date',Carbon::today()->format('Y-m-d'))->first();
 
         if($today){
             return $today;
         }else{
             $todayObject = new Day;
-            $todayObject->date = Carbon::today();
+            $todayObject->date = Carbon::today()->format('Y-m-d');
             $todayObject->pengawas = null;
             $todayObject->hsse = null;
 

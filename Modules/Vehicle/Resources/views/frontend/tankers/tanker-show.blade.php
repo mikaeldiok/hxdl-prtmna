@@ -4,7 +4,7 @@
         @php
         function checkDiff($date){
             $the_date = Carbon\Carbon::parse($date);
-            $today = Carbon\Carbon::today();
+            $today = Carbon\Carbon::today()->format('Y-m-d');
             $diff = $today->diffInDays($the_date);
             
             if($the_date < $today){
