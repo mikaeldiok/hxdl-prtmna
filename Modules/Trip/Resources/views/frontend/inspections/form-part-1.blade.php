@@ -11,7 +11,7 @@
             ?>
             {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!}
             <div class="input-group date datetime" id="{{$field_name}}" name="{{$field_name}}" data-target-input="nearest">
-                {{ html()->text($field_name,Carbon\Carbon::today()->format('d/m/Y'))->placeholder($field_placeholder)->class('form-control datetimepicker-input')->attributes(["$required", 'data-target'=>"#$field_name"]) }}
+                {{ html()->text($field_name,Carbon\Carbon::today()->format('d/m/Y'))->placeholder($field_placeholder)->class('form-control date datetimepicker-input')->attributes(["$required", 'data-target'=>"#$field_name"]) }}
                 <div class="input-group-append" data-target="#{{$field_name}}" data-toggle="datetimepicker">
                     <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
                 </div>
@@ -31,6 +31,13 @@
             ?>
             {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!}
             {{ html()->select($field_name, $select_options)->placeholder($field_placeholder)->class('form-control select2')->attributes(["$required"]) }}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4 col-md-6">
+        <div class="form-group">
+            {{ html()->label("Status") }}: <span id="status" class=p-2>-</span>
         </div>
     </div>
 </div>
@@ -98,8 +105,14 @@ $("#tanker_id").on('change', function(e) {
         },
         success: function (data) {
             if(data){
+                $("#status").html("ON");
+                $("#status").addClass("bg-success text-white");
+                $("#status").removeClass("bg-danger");
                 $("#inspection_form").show();
             }else{
+                $("#status").html("OFF");
+                $("#status").addClass("bg-danger text-white");
+                $("#status").removeClass("bg-success");
                 $("#inspection_form").hide();
             }
         },

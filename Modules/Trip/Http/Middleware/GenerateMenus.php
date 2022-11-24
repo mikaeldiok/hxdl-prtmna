@@ -42,7 +42,7 @@ class GenerateMenus
                 'class' => 'c-sidebar-nav-link',
             ]);
 
-            $menu->add('<i class="fas fa-truck c-sidebar-nav-icon"></i> '.trans('menu.trip.inspections'), [
+            $menu->add('<i class="fas fa-truck c-sidebar-nav-icon"></i> '.trans('menu.trip.inspections').' History', [
                 'route' => 'backend.inspections.index',
                 'class' => 'c-sidebar-nav-item',
             ])

@@ -31,10 +31,8 @@ class DaysDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', function ($data) {
-                $module_name = $this->module_name;
-
-                return view('backend.includes.action_column', compact('module_name', 'data'));
+            ->editColumn('date', function ($data) {
+                return '<a href="'.route("backend.$this->module_name.show", $data).'">'.$data->date.'</a>';
             })
             ->editColumn('updated_at', function ($data) {
                 $module_name = $this->module_name;
@@ -54,7 +52,7 @@ class DaysDataTable extends DataTable
 
                 return $formated_date;
             })
-            ->rawColumns(['name', 'action','photo','available']);
+            ->rawColumns(['date', 'action','photo','available']);
     }
 
     /**
@@ -78,7 +76,7 @@ class DaysDataTable extends DataTable
      */
     public function html()
     {
-        $created_at = 1;
+        $created_at = 0;
         return $this->builder()
                 ->setTableId('days-table')
                 ->columns($this->getColumns())
@@ -108,10 +106,6 @@ class DaysDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->addClass('text-center'),
             Column::make('id')->hidden(),
             Column::make('date')->title("Tanggal"),
             Column::make('pengawas')->title("Pengawas"),

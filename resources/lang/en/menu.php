@@ -13,7 +13,7 @@ return [
     'trip' => [
         'title'             => 'Trip',
         'inspections'       => 'Inspection',
-        'days'              => 'Day'
+        'days'              => 'Riwayat Pengawas'
     ],
 
     'blog' => [

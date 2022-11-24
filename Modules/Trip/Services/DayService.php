@@ -116,15 +116,21 @@ class DayService{
         DB::beginTransaction();
 
         try {
-            
-            $dayObject = new Day;
-            $dayObject->fill($data);
+            $day = Day::where('date',Carbon::today()->format('Y-m-d'))->first();
 
-            $dayObject->date = Carbon::today()->format('Y-m-d');
-
-            $dayObjectArray = $dayObject->toArray();
-
-            $day = Day::create($dayObjectArray);
+            if($day){
+                $day->fill($data);
+                $day->save();
+            }else{
+                $dayObject = new Day;
+                $dayObject->fill($data);
+    
+                $dayObject->date = Carbon::today()->format('Y-m-d');
+    
+                $dayObjectArray = $dayObject->toArray();
+    
+                $day = Day::create($dayObjectArray);
+            }
             
         }catch (Exception $e){
             DB::rollBack();

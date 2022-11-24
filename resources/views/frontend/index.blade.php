@@ -8,16 +8,31 @@
     <div class="container">
       <div class="row">
 
+      @if(Auth::check())
+        @if(!(Auth::user()->hasRole('pengawas') || Auth::user()->hasRole('hsse')))
+          <div class="col-md-6 col-sm-6 mt-2">
+            <div class="media block-6">
+              <div class="icon text-warning"><span class="ion-ios-bulb"></span></div>
+              <div class="media-body">
+                <h3 class="heading">AMT</h3>
+                <p>Daftar OPTRIM AMT</p>
+                <p><a href="{{route('frontend.inspections.create-part-1')}}" class="link-underline">Create Inspection</a></p>
+              </div>
+            </div>     
+          </div>
+        @endif
+      @else
         <div class="col-md-6 col-sm-6 mt-2">
-          <div class="media block-6">
-            <div class="icon text-warning"><span class="ion-ios-bulb"></span></div>
-            <div class="media-body">
-              <h3 class="heading">AMT</h3>
-              <p>Daftar OPTRIM AMT</p>
-              <p><a href="{{route('frontend.inspections.create-part-1')}}" class="link-underline">Create Inspection</a></p>
-            </div>
-          </div>     
-        </div>
+            <div class="media block-6">
+              <div class="icon text-warning"><span class="ion-ios-bulb"></span></div>
+              <div class="media-body">
+                <h3 class="heading">AMT</h3>
+                <p>Daftar OPTRIM AMT</p>
+                <p><a href="{{route('frontend.inspections.create-part-1')}}" class="link-underline">Create Inspection</a></p>
+              </div>
+            </div>     
+          </div>
+      @endif
 
         <div class="col-md-6 col-sm-6 mt-2">
           <div class="media block-6">

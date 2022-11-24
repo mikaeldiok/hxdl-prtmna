@@ -13,7 +13,7 @@ return [
     'trip' => [
         'title'             => 'Pre Trip Inspection',
         'inspections'       => 'Inspection',
-        'days'               => 'Hari'
+        'days'               => 'Riwayat Pengawas'
     ],
 
     'blog' => [

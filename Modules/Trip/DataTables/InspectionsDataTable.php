@@ -32,13 +32,32 @@ class InspectionsDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', function ($data) {
-                $module_name = $this->module_name;
-
-                return view('backend.includes.action_column', compact('module_name', 'data'));
+            ->editColumn('tanker.nomor_polisi', function ($data) {
+                return '<a href="'.route("backend.$this->module_name.show", $data).'">'.$data->tanker->nomor_polisi.'</a>';
             })
             ->editColumn('pretrip_percentage', function ($data) {
-                return ($data->pretrip_percentage * 100)."% OK";
+                $true_perecentage = $data->pretrip_percentage * 100;
+
+                if($true_perecentage == 100)
+                {
+                    $availability = '<p class="text-white text-center bg-success rounded">'.$true_perecentage.'% OK</p>';
+                }else{
+                    $availability = '<p class="text-white text-center bg-danger rounded">'.$true_perecentage.'% OK</p>';
+                }
+
+                return $availability;
+            })
+            ->editColumn('verify_by_pengawas', function ($data) {
+                if($data->verify_by_pengawas)
+                    return '<i class="fa-solid fa-check text-success"></i>';
+                else
+                    return '<i class="fa-solid fa-times text-danger"></i>';
+            })
+            ->editColumn('verify_by_hsse', function ($data) {
+                if($data->verify_by_pengawas)
+                    return '<i class="fa-solid fa-check text-success"></i>';
+                else
+                    return '<i class="fa-solid fa-times text-danger"></i>';
             })
             ->editColumn('updated_at', function ($data) {
                 $module_name = $this->module_name;
@@ -58,7 +77,7 @@ class InspectionsDataTable extends DataTable
 
                 return $formated_date;
             })
-            ->rawColumns(['name', 'action','photo','available']);
+            ->rawColumns(['tanker.nomor_polisi', 'action','photo','available','verify_by_pengawas','verify_by_hsse','pretrip_percentage']);
     }
 
     /**
@@ -88,7 +107,7 @@ class InspectionsDataTable extends DataTable
      */
     public function html()
     {
-        $created_at = 1;
+        $created_at = 0;
         return $this->builder()
                 ->setTableId('inspections-table')
                 ->columns($this->getColumns())
@@ -119,10 +138,6 @@ class InspectionsDataTable extends DataTable
     {
         if(Auth::user()->hasRole("hsse")){
             return [
-                Column::computed('action')
-                      ->exportable(false)
-                      ->printable(false)
-                      ->addClass('text-center'),
                 Column::make('id')->hidden(),
                 Column::make('tanker.nomor_polisi')->title("Nomor Polisi"),
                 Column::make('amt1')->title("AMT1"),
@@ -137,10 +152,6 @@ class InspectionsDataTable extends DataTable
             ];
         }else{
             return [
-                Column::computed('action')
-                    ->exportable(false)
-                    ->printable(false)
-                    ->addClass('text-center'),
                 Column::make('id')->hidden(),
                 Column::make('tanker.nomor_polisi')->title("Nomor Polisi"),
                 Column::make('amt1')->title("AMT1"),

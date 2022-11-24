@@ -4,6 +4,7 @@ namespace Modules\Trip\Http\Controllers\Backend;
 
 use App\Authorizable;
 use App\Http\Controllers\Controller;
+use Modules\Trip\Entities\Day;
 use Auth;
 use Carbon\Carbon;
 use Flash;
@@ -35,7 +36,7 @@ class DaysController extends Controller
         $this->module_path = 'days';
 
         // module icon
-        $this->module_icon = 'fas fa-graduation-cap';
+        $this->module_icon = 'fas fa-calendar';
 
         // module model name, path
         $this->module_model = "Modules\Trip\Entities\Day";
@@ -128,6 +129,8 @@ class DaysController extends Controller
         $module_name_singular = Str::singular($module_name);
 
         $module_action = 'Create';
+
+        \Log::debug(Day::where('date',Carbon::today()->format('Y-m-d'))->first());
 
         $options = $this->dayService->create()->data;
 

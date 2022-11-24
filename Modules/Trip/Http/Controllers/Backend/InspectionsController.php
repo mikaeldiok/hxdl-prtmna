@@ -35,7 +35,7 @@ class InspectionsController extends Controller
         $this->module_path = 'inspections';
 
         // module icon
-        $this->module_icon = 'fas fa-graduation-cap';
+        $this->module_icon = 'fas fa-truck';
 
         // module model name, path
         $this->module_model = "Modules\Trip\Entities\Inspection";
@@ -166,6 +166,7 @@ class InspectionsController extends Controller
 
         $$module_name_singular = $inspections->data;
         $tanker = $inspections->data->tanker;
+        $keterangan = implode(",",$inspections->keterangan);
 
         //determine connections
         $connection = config('database.default');
@@ -179,7 +180,7 @@ class InspectionsController extends Controller
 
         return view(
             "trip::backend.$module_name.show",
-            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "$module_name_singular",'activities','driver','tanker')
+            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "$module_name_singular",'activities','driver','tanker','keterangan')
         );
     }
 

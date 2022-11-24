@@ -330,12 +330,7 @@ class InspectionService{
             
             $inspection_array = array_merge($inspection_array_value, $inspection_array_photo);
 
-            \Log::debug("iaprev".$inspection->inspection_array);
-
             $old_inspection = json_decode($inspection->inspection_array,true);
-
-            \Log::debug("ia".json_encode($inspection_array));
-            \Log::debug("oi".json_encode($old_inspection));
 
             $inspection->inspection_array = array_merge($old_inspection, $inspection_array);
 
@@ -364,12 +359,38 @@ class InspectionService{
     }
     public function show($id, $inspectionId = null){
 
-        Log::info(label_case($this->module_title.' '.__function__).' | User:'.(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
+        $inspection = Inspection::findOrFail($id);
 
+        $inspection_collection = collect(json_decode($inspection->inspection_array,true));
+        $failed_inspection = $inspection_collection->filter(function ($value, $key) {
+                                if(str_contains($key,"array_value")){
+                                    return str_contains($value,"0") ;
+                                }
+                            })->all();
+
+        [$fi_keys, $fi_values] = Arr::divide($failed_inspection);
+
+        foreach($fi_keys as $key => $fi_key){
+            $fi_keys[$key] = str_replace("array_value_","",$fi_key); 
+        }
+
+        $list = collect(config("array-form"));
+        $sections = $list->filter(function ($value, $key) use ($fi_keys) {
+                        return in_array($value['code'],$fi_keys);
+                    })->all();
+        
+        $keterangan = [];
+
+        foreach($sections as $section){
+            $keterangan[] = $section["name"];
+        }
+
+        Log::info(label_case($this->module_title.' '.__function__).' | User:'.(Auth::user()->name ?? 'unknown').'(ID:'.(Auth::user()->id ?? "0").')');
         return (object) array(
             'error'=> false,            
             'message'=> '',
-            'data'=> Inspection::findOrFail($id),
+            'data'=> $inspection,
+            'keterangan' => $keterangan,
         );
     }
 
