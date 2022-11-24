@@ -4,8 +4,8 @@
     <div class="row mb-5">
       <div class="col-md-6 col-lg-4">
         <h3 class="heading-section">About Us</h3>
-        <p class="lead">Sistem Pre Trip Planner</p>
-        <p class="mb-5">sistem pre trip planner</p>
+        <p class="lead">OPTRIM</p>
+        <p class="mb-5">Online Pre Trip Inspection Monitoring</p>
       </div>
       
 
