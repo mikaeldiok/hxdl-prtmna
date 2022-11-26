@@ -22,10 +22,14 @@
                 ?>
                 <td>{{$line['no']}}. {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!} @if($line["mandatory"])<span class="font-weight-bold">(M)</span>@else<span>(A)</span> @endif</td>
                 <td>
-                    : @if($array_inspection[('array_value_'.$line['code'])])
-                    <span class="text-success">ADA/BAIK</span>
+                @if(array_key_exists( ('array_value_'.$line['code']),$array_inspection) )
+                        : @if($array_inspection[('array_value_'.$line['code'])])
+                        <span class="text-success">ADA/BAIK</span>
+                    @else
+                        <span class="text-danger">TIDAK</span>
+                    @endif
                 @else
-                    <span class="text-danger">TIDAK</span>
+                    <span class="text-warning">---</span>
                 @endif
                 </td>
             </tr>
@@ -65,10 +69,14 @@
                 ?>
                 <td>{{$line['no']}}. {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!} @if($line["mandatory"])<span class="font-weight-bold">(M)</span>@else<span>(A)</span> @endif</td>
                 <td>
-                    : @if($array_inspection[('array_value_'.$line['code'])])
-                    <span class="text-success">ADA/BAIK</span>
+                @if(array_key_exists( ('array_value_'.$line['code']),$array_inspection) )
+                        : @if($array_inspection[('array_value_'.$line['code'])])
+                        <span class="text-success">ADA/BAIK</span>
+                    @else
+                        <span class="text-danger">TIDAK</span>
+                    @endif
                 @else
-                    <span class="text-danger">TIDAK</span>
+                    <span class="text-warning">---</span>
                 @endif
                 </td>
             </tr>
