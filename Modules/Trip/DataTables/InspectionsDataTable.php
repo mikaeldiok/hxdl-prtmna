@@ -59,6 +59,12 @@ class InspectionsDataTable extends DataTable
                 else
                     return '<i class="fa-solid fa-times text-danger"></i>';
             })
+            ->editColumn('day.date', function ($data) {
+
+                $formated_date = Carbon::parse($data->day->date)->format('d/m/Y');
+
+                return $formated_date;
+            })
             ->editColumn('updated_at', function ($data) {
                 $module_name = $this->module_name;
 
@@ -139,7 +145,8 @@ class InspectionsDataTable extends DataTable
         if(Auth::user()->hasRole("hsse")){
             return [
                 Column::make('id')->hidden(),
-                Column::make('tanker.nomor_polisi')->title("Nomor Polisi"),
+                Column::make('day.date')->data('day.date')->title("Tanggal")->hidden(),
+                Column::make('tanker.nomor_polisi')->data('tanker.nomor_polisi')->title("Nomor Polisi"),
                 Column::make('amt1')->title("AMT1"),
                 Column::make('amt2')->title("AMT2"),
                 Column::make('pretrip_percentage')->title("Hasil Pre Trip Inspection"),
@@ -153,7 +160,8 @@ class InspectionsDataTable extends DataTable
         }else{
             return [
                 Column::make('id')->hidden(),
-                Column::make('tanker.nomor_polisi')->title("Nomor Polisi"),
+                Column::make('day.date')->data('day.date')->title("Tanggal")->hidden(),
+                Column::make('tanker.nomor_polisi')->data('tanker.nomor_polisi')->title("Nomor Polisi"),
                 Column::make('amt1')->title("AMT1"),
                 Column::make('amt2')->title("AMT2"),
                 Column::make('pretrip_percentage')->title("Hasil Pre Trip Inspection"),

@@ -50,9 +50,9 @@
                 $required = "required";
                 ?>
                 {{$line['no']}}. {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!} @if($line["mandatory"])<span class="font-weight-bold">(M)</span>@else<span>(A)</span> @endif
-                <fieldset id="array_value_{{$line['code']}}">
+                <fieldset id="array_value_{{$line['code']}}" required="required">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input mr-1" type="radio" id="{{$line['code']}}_yes" name="array_value_{{$line['code']}}" value="1">
+                        <input class="form-check-input mr-1" type="radio" id="{{$line['code']}}_yes" name="array_value_{{$line['code']}}" value="1" required="required">
                         <label class="form-check-label mr-2" for="{{$line['code']}}_yes">ada/baik</label><br>
                         <input class="form-check-input mr-1" type="radio" id="{{$line['code']}}_no" name="array_value_{{$line['code']}}" value="0">
                         <label class="form-check-label mr-2" for="{{$line['code']}}_no">tidak</label><br> 
