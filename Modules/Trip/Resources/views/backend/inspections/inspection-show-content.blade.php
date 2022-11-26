@@ -36,9 +36,13 @@
             @if($line["mandatory"])
                 <tr>
                     <td>
-                        <a href="{{$array_inspection[('array_photo_'.$line['code'])]}}">
-                            <img src="{{$array_inspection[('array_photo_'.$line['code'])]}}" alt="{{$line['name']}}_photo" width="100" height="100"> 
-                        </a>
+                        @if(array_key_exists( ('array_photo_'.$line['code']),$array_inspection) )
+                            <a href="{{$array_inspection[('array_photo_'.$line['code'])]}}">
+                                <img src="{{$array_inspection[('array_photo_'.$line['code'])]}}" alt="{{$line['name']}}_photo" width="100" height="100"> 
+                            </a>
+                        @else
+                            <span class="text-warning">---</span>
+                        @endif
                     </td>
                 </tr>
             @endif
@@ -84,12 +88,16 @@
             @if($line["mandatory"])
                 <tr>
                      <td>
-                    @if(!in_array($line["no"],[4,5,6,7]))
-                        <a href="{{$array_inspection[('array_photo_'.$line['code'])]}}">
-                            <img src="{{$array_inspection[('array_photo_'.$line['code'])]}}" alt="{{$line['name']}}_photo" width="100" height="100"> 
-                        </a>                    
+                     @if(array_key_exists( ('array_photo_'.$line['code']),$array_inspection) )
+                        @if(!in_array($line["no"],[4,5,6,7]))
+                            <a href="{{$array_inspection[('array_photo_'.$line['code'])]}}">
+                                <img src="{{$array_inspection[('array_photo_'.$line['code'])]}}" alt="{{$line['name']}}_photo" width="100" height="100"> 
+                            </a>                    
+                        @else
+                            *foto termasuk di nomor 3
+                        @endif
                     @else
-                        *foto termasuk di nomor 3
+                        <span class="text-warning">---</span>
                     @endif
                     </td>
                 </tr>
