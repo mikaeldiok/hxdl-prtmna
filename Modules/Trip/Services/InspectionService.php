@@ -233,7 +233,7 @@ class InspectionService{
 
             foreach($inspection_array_photo_raw as $key => $item){
 
-                $media = $inspection->addMedia($item)->toMediaCollection($this->module_name);
+                $media = $inspection->addMedia($item)->toMediaCollection();
 
                 $inspection_array_photo += [$key => $media->getUrl()];
 
@@ -244,7 +244,7 @@ class InspectionService{
                     $inspection->getMedia($this->module_name)->first()->delete();
                 }
     
-                $media = $inspection->addMedia($request->file('photo_odometer'))->toMediaCollection($this->module_name);
+                $media = $inspection->addMedia($request->file('photo_odometer'))->toMediaCollection();
 
                 $inspection->photo_odometer = $media->getUrl();
 
@@ -310,7 +310,7 @@ class InspectionService{
 
             foreach($inspection_array_photo_raw as $key => $item){
 
-                $media = $inspection->addMedia($item)->toMediaCollection($this->module_name);
+                $media = $inspection->addMedia($item)->toMediaCollection();
 
                 $inspection_array_photo += [$key => $media->getUrl()];
 
@@ -321,7 +321,7 @@ class InspectionService{
                     $inspection->getMedia($this->module_name)->first()->delete();
                 }
     
-                $media = $inspection->addMedia($request->file('photo_odometer'))->toMediaCollection($this->module_name);
+                $media = $inspection->addMedia($request->file('photo_odometer'))->toMediaCollection();
 
                 $inspection->photo_odometer = $media->getUrl();
 
