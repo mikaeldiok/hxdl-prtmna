@@ -138,6 +138,71 @@
 </div>
 
 <hr>
+<h4>Foto Mobil Tanker</h4>
+<div class="row">
+    <div class="col-lg-3">
+        <div class="form-group">
+            <?php
+            $field_name = 'photo_front';
+            $field_lable = 'Tampak depan';
+            $field_placeholder = '';
+            $required = "required";
+            ?>
+            {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!}
+            <br>
+            <a href="{{$inspection->$field_name}}">
+                    <img src="{{$inspection->$field_name}}" alt="{{$field_name}}" width="200" height="200"> 
+                </a> 
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="form-group">
+            <?php
+            $field_name = 'photo_left';
+            $field_lable = 'Tampak Samping Kiri';
+            $field_placeholder = '';
+            $required = "required";
+            ?>
+            {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!}
+            <br>
+            <a href="{{$inspection->$field_name}}">
+                    <img src="{{$inspection->$field_name}}" alt="{{$field_name}}" width="200" height="200"> 
+                </a> 
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="form-group">
+            <?php
+            $field_name = 'photo_left';
+            $field_lable = 'Tampak Samping Kanan';
+            $field_placeholder = '';
+            $required = "required";
+            ?>
+            {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!}
+            <br>
+            <a href="{{$inspection->$field_name}}">
+                    <img src="{{$inspection->$field_name}}" alt="{{$field_name}}" width="200" height="200"> 
+                </a> 
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="form-group">
+            <?php
+            $field_name = 'photo_behind';
+            $field_lable = 'Tampak Belakang';
+            $field_placeholder = '';
+            $required = "required";
+            ?>
+            {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!}
+            <br>
+            <a href="{{$inspection->$field_name}}">
+                    <img src="{{$inspection->$field_name}}" alt="{{$field_name}}" width="200" height="200"> 
+                </a> 
+        </div>
+    </div>
+</div>
+
+<hr>
 <h4>Tambahan</h4>
 <div class="row">
     <div class="col-6">

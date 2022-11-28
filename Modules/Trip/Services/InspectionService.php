@@ -200,63 +200,72 @@ class InspectionService{
         DB::beginTransaction();
 
         try {
-            
-            $inspectionObject = new Inspection;
-            $inspectionObject->fill($rawdata);
-            
-            $inspectionObject->status = "OFF";
 
-            $data = collect($rawdata);
+            $inspection = Inspection::where('tanker_id',$rawdata["tanker_id"])
+                                            ->where('amt1',$rawdata["amt1"])
+                                            ->where('amt2',$rawdata["amt2"])
+                                            ->where('day_id',getToday()->id)
+                                            ->first();
+            if(!$inspection){
+                $inspectionObject = new Inspection;
+                $inspectionObject->fill($rawdata);
+                
+                $inspectionObject->status = "OFF";
 
-            $inspection_array_value = $data->filter(function ($value, $key) {
-                                    return str_contains($key,"array_value") ;
-                                })->all();
+                $data = collect($rawdata);
 
-            $inspection_array_value_true = collect($inspection_array_value)->filter(function ($value, $key) {
-                                                return $value > 0 ;
-                                            })->all();
+                $inspection_array_value = $data->filter(function ($value, $key) {
+                                        return str_contains($key,"array_value") ;
+                                    })->all();
 
-            $inspection_array_photo_raw = $data->filter(function ($value, $key) {
-                                                return str_contains($key,"array_photo") ;
-                                            })->all();
-            
-            $percentage_raw = count($inspection_array_value_true) / count($inspection_array_value);
-            $inspectionObject->pretrip_percentage = round($percentage_raw, 2);
+                $inspection_array_value_true = collect($inspection_array_value)->filter(function ($value, $key) {
+                                                    return $value > 0 ;
+                                                })->all();
 
-            $inspectionObject->day_id = getToday()->id;
+                $inspection_array_photo_raw = $data->filter(function ($value, $key) {
+                                                    return str_contains($key,"array_photo") ;
+                                                })->all();
+                
+                $percentage_raw = count($inspection_array_value_true) / count($inspection_array_value);
+                $inspectionObject->pretrip_percentage = round($percentage_raw, 2);
 
-            $inspection_array_photo = [];
-            
-            $inspectionObjectArray = $inspectionObject->toArray();
+                $inspectionObject->day_id = getToday()->id;
 
-            $inspection = Inspection::create($inspectionObjectArray);
+                $inspection_array_photo = [];
+                
+                $inspectionObjectArray = $inspectionObject->toArray();
 
-            foreach($inspection_array_photo_raw as $key => $item){
+                $inspection = Inspection::create($inspectionObjectArray);
 
-                $media = $inspection->addMedia($item)->toMediaCollection();
+                foreach($inspection_array_photo_raw as $key => $item){
 
-                $inspection_array_photo += [$key => $media->getUrl()];
+                    $media = $inspection->addMedia($item)->toMediaCollection();
 
-            }
+                    $inspection_array_photo += [$key => $media->getUrl()];
 
-            if ($request->hasFile('photo_odometer')) {
-                if ($inspection->getMedia($this->module_name)->first()) {
-                    $inspection->getMedia($this->module_name)->first()->delete();
                 }
-    
-                $media = $inspection->addMedia($request->file('photo_odometer'))->toMediaCollection();
 
-                $inspection->photo_odometer = $media->getUrl();
+                if ($request->hasFile('photo_odometer')) {
+                    if ($inspection->getMedia($this->module_name)->first()) {
+                        $inspection->getMedia($this->module_name)->first()->delete();
+                    }
+        
+                    $media = $inspection->addMedia($request->file('photo_odometer'))->toMediaCollection();
+
+                    $inspection->photo_odometer = $media->getUrl();
+
+                    $inspection->save();
+                }
+                
+                $inspection_array = array_merge($inspection_array_value, $inspection_array_photo);
+
+                $inspection->inspection_array = json_encode($inspection_array);
 
                 $inspection->save();
-            }
-            
-            $inspection_array = array_merge($inspection_array_value, $inspection_array_photo);
 
-            $inspection->inspection_array = json_encode($inspection_array);
-
-            $inspection->save();
-            
+            }else{
+                Log::info(label_case($this->module_title.' '.__function__)." ISEXIST | '".$inspection->name.'(ID:'.$inspection->id.") ' by User:".(Auth::user()->name ?? 'driver').'(ID:'.(Auth::user()->id ?? "0").')');
+            }     
             
         }catch (Exception $e){
             DB::rollBack();
@@ -327,7 +336,53 @@ class InspectionService{
 
                 $inspection->save();
             }
+
+            if ($request->hasFile('photo_front')) {
+                if ($inspection->getMedia($this->module_name)->first()) {
+                    $inspection->getMedia($this->module_name)->first()->delete();
+                }
+    
+                $media = $inspection->addMedia($request->file('photo_front'))->toMediaCollection();
+
+                $inspection->photo_front = $media->getUrl();
+
+                $inspection->save();
+            }
             
+            if ($request->hasFile('photo_left')) {
+                if ($inspection->getMedia($this->module_name)->first()) {
+                    $inspection->getMedia($this->module_name)->first()->delete();
+                }
+    
+                $media = $inspection->addMedia($request->file('photo_left'))->toMediaCollection();
+
+                $inspection->photo_left = $media->getUrl();
+
+                $inspection->save();
+            }
+            if ($request->hasFile('photo_right')) {
+                if ($inspection->getMedia($this->module_name)->first()) {
+                    $inspection->getMedia($this->module_name)->first()->delete();
+                }
+    
+                $media = $inspection->addMedia($request->file('photo_right'))->toMediaCollection();
+
+                $inspection->photo_right = $media->getUrl();
+
+                $inspection->save();
+            }
+
+            if ($request->hasFile('photo_behind')) {
+                if ($inspection->getMedia($this->module_name)->first()) {
+                    $inspection->getMedia($this->module_name)->first()->delete();
+                }
+    
+                $media = $inspection->addMedia($request->file('photo_behind'))->toMediaCollection();
+
+                $inspection->photo_behind = $media->getUrl();
+
+                $inspection->save();
+            }
             $inspection_array = array_merge($inspection_array_value, $inspection_array_photo);
 
             $old_inspection = json_decode($inspection->inspection_array,true);
