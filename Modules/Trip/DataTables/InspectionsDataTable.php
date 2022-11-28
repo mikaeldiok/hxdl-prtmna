@@ -54,7 +54,7 @@ class InspectionsDataTable extends DataTable
                     return '<i class="fa-solid fa-times text-danger"></i>';
             })
             ->editColumn('verify_by_hsse', function ($data) {
-                if($data->verify_by_pengawas)
+                if($data->verify_by_hsse)
                     return '<i class="fa-solid fa-check text-success"></i>';
                 else
                     return '<i class="fa-solid fa-times text-danger"></i>';
