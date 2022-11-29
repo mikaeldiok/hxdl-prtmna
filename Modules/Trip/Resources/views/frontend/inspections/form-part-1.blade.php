@@ -48,7 +48,6 @@
 
 <!-- Select2 Library -->
 <x-library.select2 />
-<x-library.datetime-picker />
 
 @push('after-styles')
 <!-- File Manager -->

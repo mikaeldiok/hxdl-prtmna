@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="/css/frontend.css">
     <link rel="stylesheet" href="/css/style.css">
 
+    <link href="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/css/tempus-dominus.css"
+  rel="stylesheet" crossorigin="anonymous">
     @stack('after-styles')
 
     <x-google-analytics />
@@ -58,7 +60,12 @@
     <script type="text/javascript" src="/js/jquery.validate.js"></script>
     
     <link rel="stylesheet" href="/css/bootstrap-multiselect.css" type="text/css"/>
-
+    <!-- Popperjs -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    crossorigin="anonymous"></script>
+    <!-- Tempus Dominus JavaScript -->
+    <script src="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js"
+    crossorigin="anonymous"></script>
 @stack('after-scripts')
 
 </html>
