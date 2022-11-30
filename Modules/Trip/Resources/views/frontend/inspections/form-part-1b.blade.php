@@ -50,14 +50,17 @@
                 $required = "required";
                 ?>
                 {{$line['no']}}. {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!} @if($line["mandatory"])<span class="font-weight-bold">(M)</span>@else<span>(A)</span> @endif
-                <fieldset id="array_value_{{$line['code']}}" required="required">
+                <fieldset id="array_value_{{$line['code']}}" class="inspection-quiz" line-code="{{$line['code']}}" required="required">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input mr-1" type="radio" id="{{$line['code']}}_yes" name="array_value_{{$line['code']}}" value="1" required="required">
+                        <input class="form-check-input mr-1"  line-code="{{$line['code']}}" type="radio" id="{{$line['code']}}_yes" name="array_value_{{$line['code']}}" value="1" required="required">
                         <label class="form-check-label mr-2" for="{{$line['code']}}_yes">ada/baik</label><br>
-                        <input class="form-check-input mr-1" type="radio" id="{{$line['code']}}_no" name="array_value_{{$line['code']}}" value="0">
-                        <label class="form-check-label mr-2" for="{{$line['code']}}_no">tidak</label><br> 
+                        <input class="form-check-input mr-1" line-code="{{$line['code']}}" type="radio" id="{{$line['code']}}_no" name="array_value_{{$line['code']}}" value="0">
+                        <label class="form-check-label mr-2"  for="{{$line['code']}}_no">tidak</label><br> 
                     </div>
                 </fieldset>
+
+                <input type="text"
+                    id="array_note_{{$line['code']}}" placeholder="keterangan" name="array_note_{{$line['code']}}" style="display: none;">        
                 @if($line["mandatory"])
                     <input type="file"
                         id="array_photo_{{$line['code']}}" name="array_photo_{{$line['code']}}" required>
@@ -78,5 +81,19 @@
 @endpush
 
 @push ('after-scripts')
+<script>
+    $(document).on("change", ".inspection-quiz input:radio", function(){
+        var ele = $(this);  
+        var textline = "#array_note_"+ele.attr("line-code");
+        console.log(textline);
+
+        if(ele.val() == "1"){
+            $(textline).removeAttr('required');
+            $(textline).hide();
+        }else{
+            $(textline).attr('required', ''); 
+            $(textline).show();
+        }
+    });
 </script>
 @endpush

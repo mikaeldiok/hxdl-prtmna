@@ -218,6 +218,10 @@ class InspectionService{
                                         return str_contains($key,"array_value") ;
                                     })->all();
 
+                $inspection_array_notes = $data->filter(function ($value, $key) {
+                                        return str_contains($key,"array_note") ;
+                                    })->all();
+
                 $inspection_array_value_true = collect($inspection_array_value)->filter(function ($value, $key) {
                                                     return $value > 0 ;
                                                 })->all();
@@ -258,6 +262,8 @@ class InspectionService{
                 }
                 
                 $inspection_array = array_merge($inspection_array_value, $inspection_array_photo);
+
+                $inspection_array = array_merge($inspection_array,$inspection_array_notes);
 
                 $inspection->inspection_array = json_encode($inspection_array);
 
@@ -305,6 +311,10 @@ class InspectionService{
                                     return str_contains($key,"array_value") ;
                                 })->all();
 
+            $inspection_array_notes = $data->filter(function ($value, $key) {
+                                    return str_contains($key,"array_note") ;
+                                })->all();
+
             $inspection_array_value_true = collect($inspection_array_value)->filter(function ($value, $key) {
                                                 return $value > 0 ;
                                             })->all();
@@ -312,6 +322,12 @@ class InspectionService{
             $inspection_array_photo_raw = $data->filter(function ($value, $key) {
                                                 return str_contains($key,"array_photo") ;
                                             })->all();
+
+
+            $percentage_raw = count($inspection_array_value_true) / count($inspection_array_value);
+            $true_percentage_raw = ($inspection->pretrip_percentage + $percentage_raw) / count(config("array-form")) ;
+            $inspection->pretrip_percentage = round($percentage_raw, 2);
+
         
             $inspection_array_photo = [];
 
@@ -384,6 +400,8 @@ class InspectionService{
                 $inspection->save();
             }
             $inspection_array = array_merge($inspection_array_value, $inspection_array_photo);
+
+            $inspection_array = array_merge($inspection_array,$inspection_array_notes);
 
             $old_inspection = json_decode($inspection->inspection_array,true);
 

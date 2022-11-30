@@ -32,6 +32,11 @@
                     <span class="text-warning">---</span>
                 @endif
                 </td>
+                <td>
+                @if(array_key_exists( ('array_note_'.$line['code']),$array_inspection) && isset($array_inspection[('array_note_'.$line['code'])]) )
+                    <span class="font-weight-bold">Keterangan:</span> {{$array_inspection[('array_note_'.$line['code'])]}}
+                @endif
+                </td>
             </tr>
             @if($line["mandatory"])
                 <tr>
@@ -81,6 +86,11 @@
                     @endif
                 @else
                     <span class="text-warning">---</span>
+                @endif
+                </td>
+                <td>
+                @if(array_key_exists( ('array_note_'.$line['code']),$array_inspection) && isset($array_inspection[('array_note_'.$line['code'])]) )
+                    <span class="font-weight-bold">Keterangan:</span> {{$array_inspection[('array_note_'.$line['code'])]}}
                 @endif
                 </td>
             </tr>
