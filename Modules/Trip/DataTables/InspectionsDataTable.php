@@ -33,7 +33,15 @@ class InspectionsDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->editColumn('tanker.nomor_polisi', function ($data) {
-                return '<a href="'.route("backend.$this->module_name.show", $data).'">'.$data->tanker->nomor_polisi.'</a>';
+                if(Auth::user()->hasRole("pengawas")){
+                    return '<a href="'.route("backend.$this->module_name.show", $data).'">'.$data->tanker->nomor_polisi.'</a>';
+                }else if(Auth::user()->hasRole("hsse")){
+                    return '<a href="'.route("backend.$this->module_name.show-hsse", $data).'">'.$data->tanker->nomor_polisi.'</a>';
+                }else if(Auth::user()->hasRole("super admin")){
+                    return '<a href="'.route("backend.$this->module_name.show", $data).'">'.$data->tanker->nomor_polisi.'</a>';
+                }else{
+                    return $data->tanker->nomor_polisi;
+                }
             })
             ->editColumn('pretrip_percentage', function ($data) {
                 $true_perecentage = $data->pretrip_percentage * 100;
@@ -52,6 +60,17 @@ class InspectionsDataTable extends DataTable
                     return '<i class="fa-solid fa-check text-success"></i>';
                 else
                     return '<i class="fa-solid fa-times text-danger"></i>';
+            })
+            ->editColumn('verify_evidence', function ($data) {
+                if($data->verify_evidence)
+                    return '<i class="fa-solid fa-check text-success"></i>';
+                else if($data->evidence)
+                    return '<span class="text-warning">Awaiting Review...</span>';
+                else 
+                    return '<i class="fa-solid fa-times text-danger"></i>';
+            })
+            ->editColumn('keterangan_penyelesaian', function ($data) {
+                    return '<p style="font-size: 12px">'.$data->keterangan_penyelesaian.'</p>';
             })
             ->editColumn('verify_by_hsse', function ($data) {
                 if($data->verify_by_hsse)
@@ -83,7 +102,7 @@ class InspectionsDataTable extends DataTable
 
                 return $formated_date;
             })
-            ->rawColumns(['tanker.nomor_polisi', 'action','photo','available','verify_by_pengawas','verify_by_hsse','pretrip_percentage']);
+            ->rawColumns(['tanker.nomor_polisi', 'action','keterangan_penyelesaian','photo','available','verify_by_pengawas','verify_evidence','verify_by_hsse','pretrip_percentage']);
     }
 
     /**
@@ -129,7 +148,7 @@ class InspectionsDataTable extends DataTable
                     'paging' => true,
                     'searching' => true,
                     'info' => true,
-                    'responsive' => true,
+                    'responsive' => false,
                     'autoWidth' => false,
                     'searchDelay' => 350,
                 ]);
@@ -153,6 +172,7 @@ class InspectionsDataTable extends DataTable
                 Column::make('keterangan_penyelesaian')->title("Keterangan"),
                 Column::make('estimasi_penyelesaian')->title("Due Date"),
                 Column::make('verify_by_pengawas')->title("Check"),
+                Column::make('verify_evidence')->title("Evidence"),
                 Column::make('verify_by_hsse')->title("Gate In Approval"),
                 Column::make('created_at')->hidden(),
                 Column::make('updated_at')->hidden(),
@@ -168,6 +188,7 @@ class InspectionsDataTable extends DataTable
                 Column::make('keterangan_penyelesaian')->title("Keterangan"),
                 Column::make('estimasi_penyelesaian')->title("Due Date"),
                 Column::make('verify_by_pengawas')->title("Check"),
+                Column::make('verify_evidence')->title("Evidence"),
                 Column::make('created_at')->hidden(),
                 Column::make('updated_at')->hidden(),
             ];

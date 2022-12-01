@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-6">
                 <div class="form-group">
-                    {{ html()->button($text = "<i class='fas fa-plus-circle'></i> Approve" , $type = 'submit')->class('btn btn-success') }}
+                    {{ html()->button($text = "<i class='fas fa-plus-circle'></i> Approve Gate In" , $type = 'submit')->class('btn btn-success') }}
                 </div>
             </div>
             <div class="col-6">

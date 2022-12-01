@@ -166,7 +166,7 @@ class InspectionsController extends Controller
 
         $$module_name_singular = $inspections->data;
         $tanker = $inspections->data->tanker;
-        $keterangan = implode(",",$inspections->keterangan);
+        $keterangan = implode(", ",$inspections->keterangan);
 
         //determine connections
         $connection = config('database.default');

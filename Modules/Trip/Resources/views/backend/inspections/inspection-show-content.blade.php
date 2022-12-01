@@ -224,7 +224,7 @@
             $required = "";
             ?>
             <div class="border p3">
-                {{$inspection->tambahan}}
+                {{$inspection->tambahan ?? " ---"}}
             </div>
         </div>
     </div>

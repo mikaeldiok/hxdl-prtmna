@@ -12,7 +12,14 @@
                 </tr>
                 <tr>
                     <td class="font-weight-bold">Status </td>
-                    <td>: {{$inspection->status}}</td>
+                    @php
+                        $status = $inspection->status;
+                        if($status == "ON")
+                        $class = "p-1 bg-success text-white";
+                        else
+                        $class = "p-1 bg-danger text-white";
+                    @endphp
+                    <td>: <span class="{{$class}}">{{$inspection->status}}</span></td>
                 </tr>
             </tbody>
         </table>

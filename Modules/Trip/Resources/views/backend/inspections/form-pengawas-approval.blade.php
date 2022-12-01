@@ -1,9 +1,10 @@
-<hr>
-<h4>Penyelesaian</h4>
-
-<input id="verify_by_pengawas" name="verify_by_pengawas" type="hidden" value="1">
 
 @if($keterangan)
+    <hr>
+    <h4>Penyelesaian</h4>
+
+    <input id="verify_by_pengawas" name="verify_by_pengawas" type="hidden" value="1">
+
     <div class="row">
         <div class="col-6">
             <div class="form-group">

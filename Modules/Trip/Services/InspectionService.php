@@ -210,7 +210,7 @@ class InspectionService{
                 $inspectionObject = new Inspection;
                 $inspectionObject->fill($rawdata);
                 
-                $inspectionObject->status = "OFF";
+                $inspectionObject->status = "ON";
 
                 $data = collect($rawdata);
 
@@ -231,6 +231,11 @@ class InspectionService{
                                                 })->all();
                 
                 $percentage_raw = count($inspection_array_value_true) / count($inspection_array_value);
+
+                if($percentage_raw < 1){
+                    $inspectionObject->status = "OFF";
+                }
+
                 $inspectionObject->pretrip_percentage = round($percentage_raw, 2);
 
                 $inspectionObject->day_id = getToday()->id;
@@ -328,6 +333,9 @@ class InspectionService{
             $true_percentage_raw = ($inspection->pretrip_percentage + $percentage_raw) / count(config("array-form")) ;
             $inspection->pretrip_percentage = round($percentage_raw, 2);
 
+            if($percentage_raw < 1){
+                $inspectionObject->status = "OFF";
+            }
         
             $inspection_array_photo = [];
 
@@ -495,7 +503,6 @@ class InspectionService{
             $inspectionObject->estimasi_penyelesaian = convert_slash_to_basic_date($data['jenis_pekerjaan_penyelesaian']);
             $inspectionObject->verify_by_pengawas = 1;
 
-            \Log::debug($inspectionObject);
             
             $inspectionObject->save();
 
@@ -537,6 +544,19 @@ class InspectionService{
             $updating = Inspection::findOrFail($id)->update($inspectionObject->toArray());
 
             $updated_inspection = Inspection::findOrFail($id);
+
+            if ($request->hasFile('evidence')) {
+                if ($updated_inspection->getMedia($this->module_name)->first()) {
+                    $updated_inspection->getMedia($this->module_name)->first()->delete();
+                }
+    
+                $media = $updated_inspection->addMedia($request->file('evidence'))->toMediaCollection();
+
+                $updated_inspection->evidence = $media->getUrl();
+                $updated_inspection->evidence_upload_at = Carbon::now();
+
+                $updated_inspection->save();
+            }
 
 
         }catch (Exception $e){

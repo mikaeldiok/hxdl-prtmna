@@ -35,6 +35,7 @@
                 @include('vehicle::frontend.tankers.tanker-show')
                 @include('trip::backend.inspections.inspection-show-content')
                 @include('trip::backend.inspections.create-approval')
+                @include('trip::backend.inspections.create-evidency')
         </div>
     </div>
 
