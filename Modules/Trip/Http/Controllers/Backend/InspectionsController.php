@@ -206,6 +206,7 @@ class InspectionsController extends Controller
 
         $$module_name_singular = $inspections->data;
         $tanker = $inspections->data->tanker;
+        $fm = $inspections->fm;
 
         //determine connections
         $connection = config('database.default');
@@ -219,7 +220,7 @@ class InspectionsController extends Controller
 
         return view(
             "trip::backend.$module_name.show-hsse",
-            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "$module_name_singular",'activities','driver','tanker')
+            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "$module_name_singular",'activities','driver','tanker',"fm")
         );
     }
 

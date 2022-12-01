@@ -4,7 +4,7 @@
 <div class="row my-4">
     @if($inspection->evidence)
         <div class="col-6">
-            <a href="{{$inspection->evidence}}"> <i class="fas fa-download"></i> Download Evidence</a>
+            <a href="{{$inspection->evidence}}"> <i class="fas fa-download"></i> Download Evidence</a><i class="fas fa-check text-success p-1"></i>
             <br>
             <small>Last Update at: {{\Carbon\Carbon::parse($inspection->evidence_upload_at)->format('d/m/Y H:i')}}</small>
         </div>

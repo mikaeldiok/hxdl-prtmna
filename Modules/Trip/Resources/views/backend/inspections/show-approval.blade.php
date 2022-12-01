@@ -7,7 +7,12 @@
         <div class="row">
             <div class="col-6">
                 <div class="form-group">
-                    {{ html()->button($text = "<i class='fas fa-plus-circle'></i> Approve Gate In" , $type = 'submit')->class('btn btn-success') }}
+                    @if($fm && ($inspection->verify_evidence != true))
+                        {{ html()->button($text = "<i class='fas fa-plus-circle'></i> Approve Gate In" , $type = 'button')->class('btn btn-secondary')->attribute('disabled') }}
+                        <small class="text-danger">Ada persayaratan mandatory yang belum terpenuhi</small>
+                    @else
+                        {{ html()->button($text = "<i class='fas fa-plus-circle'></i> Approve Gate In" , $type = 'submit')->class('btn btn-success') }}
+                    @endif
                 </div>
             </div>
             <div class="col-6">

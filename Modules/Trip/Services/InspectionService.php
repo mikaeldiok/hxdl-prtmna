@@ -443,7 +443,7 @@ class InspectionService{
         $inspection = Inspection::findOrFail($id);
 
         $inspection_collection = collect(json_decode($inspection->inspection_array,true));
-        $failed_inspection = $inspection_collection->filter(function ($value, $key) {
+        $failed_inspection = $inspection_collection->filter(function ($value, $key){
                                 if(str_contains($key,"array_value")){
                                     return str_contains($value,"0") ;
                                 }
@@ -462,7 +462,11 @@ class InspectionService{
         
         $keterangan = [];
 
+        $failed_mandatory = false;
         foreach($sections as $section){
+            if($section["mandatory"] == "true"){
+                $failed_mandatory = true;
+            }
             $keterangan[] = $section["name"];
         }
 
@@ -472,6 +476,7 @@ class InspectionService{
             'message'=> '',
             'data'=> $inspection,
             'keterangan' => $keterangan,
+            'fm'              => $failed_mandatory,
         );
     }
 

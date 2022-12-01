@@ -17,7 +17,7 @@
                         @if($inspection->evidence)
                             {{ html()->button($text = "<i class='fas fa-plus-circle'></i> Approve" , $type = 'submit')->class('btn btn-success') }}
                         @else
-                            {{ html()->button($text = "<i class='fas fa-plus-circle'></i> Approve" , $type = 'button')->class('btn btn-success')->attributes(["disabled"]) }}
+                            {{ html()->button($text = "<i class='fas fa-plus-circle'></i> Approve" , $type = 'button')->class('btn btn-secondary')->attributes(["disabled"]) }}
                         @endif
                     </div>
                 </div>
