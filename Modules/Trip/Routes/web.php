@@ -56,6 +56,7 @@ Route::group(['namespace' => '\Modules\Trip\Http\Controllers\Frontend', 'as' => 
     Route::post("$module_name/store-inspection", ['as' => "$module_name.store-inspection", 'uses' => "$controller_name@storeInspection"]);
     Route::get("$module_name/create-part-2", ['as' => "$module_name.create-part-2", 'uses' => "$controller_name@createPart2"]);
     Route::post("$module_name/store-inspection-part2", ['as' => "$module_name.store-inspection-part2", 'uses' => "$controller_name@storeInspectionPart2"]);
+    Route::post("$module_name/checkInspection", ['as' => "$module_name.checkInspection", 'uses' => "$controller_name@checkInspection"]);
     Route::resource("$module_name", "$controller_name");
 
 });

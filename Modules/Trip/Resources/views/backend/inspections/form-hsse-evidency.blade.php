@@ -1,5 +1,6 @@
 <input id="verify_evidence" name="verify_evidence" type="hidden" value="1">
 <input id="status" name="status" type="hidden" value="ON">
+<input id="pretrip_percentage" name="pretrip_percentage" type="hidden" value="1">
 
 <div class="row my-4">
     @if($inspection->evidence)

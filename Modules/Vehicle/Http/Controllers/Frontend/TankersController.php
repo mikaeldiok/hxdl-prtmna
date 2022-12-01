@@ -176,9 +176,9 @@ class TankersController extends Controller
 
         $module_action = 'Index';
 
-        $noExpired = $this->tankerService->get_tanker($request->input('id'))->noExpired;
+        $noExpired = $this->tankerService->get_tanker($request->input('id'));
        
-        return $noExpired;
+        return response()->json($noExpired);
     }
 
     /**

@@ -59,7 +59,7 @@
                     </div>
                 </fieldset>
 
-                <input type="text"
+                <input type="text" class="my-2"
                     id="array_note_{{$line['code']}}" placeholder="keterangan" name="array_note_{{$line['code']}}" style="display: none;">        
                 @if($line["mandatory"])
                     <input type="file"

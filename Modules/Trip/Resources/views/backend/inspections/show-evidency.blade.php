@@ -1,4 +1,4 @@
-@if($inspection->pretrip_percentage < 1)
+@if($inspection->pretrip_percentage < 1 || $inspection->evidence)
 
 <div class="row mt-4">
     <div class="col">

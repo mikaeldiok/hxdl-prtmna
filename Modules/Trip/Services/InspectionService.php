@@ -169,6 +169,29 @@ class InspectionService{
         );
     }
 
+    public function checkInspection($id){
+
+        $inspection =Inspection::where('tanker_id',$id)->latest()->first();
+        
+        if($inspection->pretrip_percentage < 1){
+            if($inspection->verify_evidence){
+                if($inspection->verify_by_hsse){
+                    $inspection = null;
+                }
+            }
+        }else {
+            if($inspection->verify_by_hsse){
+                $inspection = null;
+            }
+        }
+
+        return (object) array(
+            'error'=> false,            
+            'message'=> '',
+            'data'=> $inspection,
+        );
+    }
+
     public function getList(){
 
         $inspection =Inspection::query()->orderBy('order','asc')->get();
@@ -330,11 +353,11 @@ class InspectionService{
 
 
             $percentage_raw = count($inspection_array_value_true) / count($inspection_array_value);
-            $true_percentage_raw = ($inspection->pretrip_percentage + $percentage_raw) / count(config("array-form")) ;
-            $inspection->pretrip_percentage = round($percentage_raw, 2);
+            $true_percentage_raw = (($inspection->pretrip_percentage * 36 * 100) + ($percentage_raw * count($inspection_array_value) * 100)) / count(config("array-form")) ;
+            $inspection->pretrip_percentage = round($true_percentage_raw/100, 2);
 
             if($percentage_raw < 1){
-                $inspectionObject->status = "OFF";
+                $inspection->status = "OFF";
             }
         
             $inspection_array_photo = [];
@@ -505,7 +528,7 @@ class InspectionService{
 
             $inspectionObject->jenis_pekerjaan_penyelesaian = $data['jenis_pekerjaan_penyelesaian'];
             $inspectionObject->keterangan_penyelesaian = $data['keterangan_penyelesaian'];
-            $inspectionObject->estimasi_penyelesaian = convert_slash_to_basic_date($data['jenis_pekerjaan_penyelesaian']);
+            $inspectionObject->estimasi_penyelesaian = Carbon::createFromFormat('d/m/Y', $data['estimasi_penyelesaian'])->format('Y-m-d');
             $inspectionObject->verify_by_pengawas = 1;
 
             
@@ -546,6 +569,9 @@ class InspectionService{
 
             $inspectionObject = new Inspection;
             $inspectionObject->fill($data);
+            if ($request->has('estimasi_penyelesaian')) {
+                $inspectionObject->estimasi_penyelesaian = convert_slash_to_basic_date($data['estimasi_penyelesaian']);
+            }
             $updating = Inspection::findOrFail($id)->update($inspectionObject->toArray());
 
             $updated_inspection = Inspection::findOrFail($id);

@@ -161,7 +161,7 @@ class InspectionsDataTable extends DataTable
      */
     protected function getColumns()
     {
-        if(Auth::user()->hasRole("hsse")){
+        if(Auth::user()->hasRole(["hsse","super admin"])){
             return [
                 Column::make('id')->hidden(),
                 Column::make('day.date')->data('day.date')->title("Tanggal")->hidden(),

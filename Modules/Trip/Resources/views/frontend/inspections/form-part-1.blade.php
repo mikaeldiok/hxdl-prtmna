@@ -34,13 +34,6 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-4 col-md-6">
-        <div class="form-group">
-            {{ html()->label("Status") }}: <span id="status" class=p-2>-</span>
-        </div>
-    </div>
-</div>
 
 <div class="row">
 
@@ -103,16 +96,45 @@ $("#tanker_id").on('change', function(e) {
             "id": data.id
         },
         success: function (data) {
-            if(data){
+            if(data.noExpired){
                 $("#status").html("ON");
                 $("#status").addClass("bg-success text-white");
                 $("#status").removeClass("bg-danger");
                 $("#inspection_form").show();
+
+                data = ($(this).select2('data'))[0];
+
             }else{
                 $("#status").html("OFF");
                 $("#status").addClass("bg-danger text-white");
                 $("#status").removeClass("bg-success");
                 $("#inspection_form").hide();
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            Swal.fire("@lang('delete error')", "@lang('error')", "error");
+        }
+    });
+
+
+    $.ajax({
+        type: "POST",
+        url: '{{route("frontend.inspections.checkInspection")}}',
+        data: {
+            "_method":"POST",
+            "_token": "{{ csrf_token() }}",
+            "id": data.id
+        },
+        success: function (data) {
+            if(data != false){
+                $("#inspection_status").html(data);
+                $("#inspection_form").hide();
+                $('#show-tanker').hide();
+                $('#submit-buttons').hide();
+            }else{
+                $('#show-tanker').show();
+                $("#inspection_form").show();
+                $('#submit-buttons').show();
             }
         },
         error: function (xhr, ajaxOptions, thrownError) {

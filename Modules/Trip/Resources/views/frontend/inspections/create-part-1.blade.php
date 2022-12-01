@@ -21,11 +21,15 @@
 
                         </div>
           
+                        <div id="inspection_status">
+                         </div>
+
                         <div id="inspection_form">
                             @include ("trip::frontend.$module_name.form-part-1b")
                         </div>
 
-                        <div class="row">
+
+                        <div class="row" id="submit-buttons">
                             <div class="col-6">
                                 <div class="form-group">
                                     {{ html()->button($text = "<i class='fas fa-plus-circle'></i> " . ucfirst("Submit") . "", $type = 'submit')->class('btn btn-success') }}

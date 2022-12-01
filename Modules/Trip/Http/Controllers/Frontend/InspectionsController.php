@@ -192,6 +192,29 @@ class InspectionsController extends Controller
         );
     }
 
+    public function checkInspection(Request $request)
+    {
+        $module_title = $this->module_title;
+        $module_name = $this->module_name;
+        $module_path = $this->module_path;
+        $module_icon = $this->module_icon;
+        $module_model = $this->module_model;
+        $module_name_singular = Str::singular($module_name);
+
+        $module_action = 'Index';
+
+        $inspection = $this->inspectionService->checkInspection($request->input('id'))->data;
+       
+        if(!$inspection){
+            return false;
+        }
+        
+        return view(
+            "trip::frontend.$module_name.inspection-show-status",
+            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "inspection")
+        );
+    }
+
     /**
      * Show inspection details
      *

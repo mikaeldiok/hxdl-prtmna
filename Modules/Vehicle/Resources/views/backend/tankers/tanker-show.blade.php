@@ -1,12 +1,5 @@
 
 <div class="row">
-    <div class="col-lg-4 col-md-6">
-        <div class="form-group">
-            {{ html()->label("Status") }}: <span id="status" class=p-2>-</span>
-        </div>
-    </div>
-</div>
-<div class="row">
     <div class="col-lg-3">
         <h4 class="my-3">Masa Berlaku</h4>
         @php
