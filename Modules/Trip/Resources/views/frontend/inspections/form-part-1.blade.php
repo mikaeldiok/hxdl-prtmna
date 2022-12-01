@@ -69,7 +69,7 @@ $(function() {
 
 $("#tanker_id").on('change', function(e) {
     // Access to full data
-    data = ($(this).select2('data'))[0];
+    tankerData = ($(this).select2('data'))[0];
 
     $.ajax({
         type: "POST",
@@ -77,70 +77,66 @@ $("#tanker_id").on('change', function(e) {
         data: {
             "_method":"POST",
             "_token": "{{ csrf_token() }}",
-            "id": data.id
+            "id": tankerData.id
         },
         success: function (data) {
             $('#show-tanker').html(data);
+
+            $.ajax({
+                type: "POST",
+                url: '{{route("frontend.inspections.checkInspection")}}',
+                data: {
+                    "_method":"POST",
+                    "_token": "{{ csrf_token() }}",
+                    "id": tankerData.id
+                },
+                success: function (data) {
+                    if(data != false){ // there is inspection that not yet over for this tanker
+                        $("#inspection_status").html(data);
+                        $('#show-tanker').hide();
+                        $('#submit-buttons').hide();
+                    }else{// inspection is over for this tanker
+                        $("#inspection_status").html("");
+                        $('#show-tanker').show();
+                        $('#submit-buttons').show();
+
+                        $.ajax({
+                            type: "POST",
+                            url: '{{route("frontend.tankers.checkNoExpired")}}',
+                            data: {
+                                "_method":"POST",
+                                "_token": "{{ csrf_token() }}",
+                                "id": tankerData.id
+                            },
+                            success: function (data) {
+                                if(data.noExpired){
+                                    $("#status").html("ON");
+                                    $("#status").addClass("bg-success text-white");
+                                    $("#status").removeClass("bg-danger");
+                                    $("#inspection_form").show();
+                                }else{
+                                    $("#status").html("OFF");
+                                    $("#status").addClass("bg-danger text-white");
+                                    $("#status").removeClass("bg-success");
+                                    $("#inspection_form").hide();
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                console.log(textStatus);
+                            }
+                        });
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    Swal.fire("@lang('delete error')", "@lang('error')", "error");
+                }
+            });
         },
         error: function (xhr, ajaxOptions, thrownError) {
             Swal.fire("@lang('delete error')", "@lang('error')", "error");
         }
     });
 
-    $.ajax({
-        type: "POST",
-        url: '{{route("frontend.tankers.checkNoExpired")}}',
-        data: {
-            "_method":"POST",
-            "_token": "{{ csrf_token() }}",
-            "id": data.id
-        },
-        success: function (data) {
-            if(data.noExpired){
-                $("#status").html("ON");
-                $("#status").addClass("bg-success text-white");
-                $("#status").removeClass("bg-danger");
-                $("#inspection_form").show();
-
-                data = ($(this).select2('data'))[0];
-
-            }else{
-                $("#status").html("OFF");
-                $("#status").addClass("bg-danger text-white");
-                $("#status").removeClass("bg-success");
-                $("#inspection_form").hide();
-            }
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            Swal.fire("@lang('delete error')", "@lang('error')", "error");
-        }
-    });
-
-
-    $.ajax({
-        type: "POST",
-        url: '{{route("frontend.inspections.checkInspection")}}',
-        data: {
-            "_method":"POST",
-            "_token": "{{ csrf_token() }}",
-            "id": data.id
-        },
-        success: function (data) {
-            if(data != false){
-                $("#inspection_status").html(data);
-                $("#inspection_form").hide();
-                $('#show-tanker').hide();
-                $('#submit-buttons').hide();
-            }else{
-                $('#show-tanker').show();
-                $("#inspection_form").show();
-                $('#submit-buttons').show();
-            }
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            Swal.fire("@lang('delete error')", "@lang('error')", "error");
-        }
-    });
 });
 </script>
 @endpush

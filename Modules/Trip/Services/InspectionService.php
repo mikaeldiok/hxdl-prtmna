@@ -173,15 +173,17 @@ class InspectionService{
 
         $inspection =Inspection::where('tanker_id',$id)->latest()->first();
         
-        if($inspection->pretrip_percentage < 1){
-            if($inspection->verify_evidence){
+        if($inspection){
+            if($inspection->pretrip_percentage < 1){
+                if($inspection->verify_evidence){
+                    if($inspection->verify_by_hsse){
+                        $inspection = null;
+                    }
+                }
+            }else {
                 if($inspection->verify_by_hsse){
                     $inspection = null;
                 }
-            }
-        }else {
-            if($inspection->verify_by_hsse){
-                $inspection = null;
             }
         }
 
