@@ -65,7 +65,7 @@
                         id="photo_odometer" name="photo_odometer" required>
 
 <hr>
-<h4>Foto Mobil Tanker</h4>
+<h4>Foto Mobil Tangki</h4>
 <div class="row">
     <div class="col-lg-3">
         <div class="form-group">
