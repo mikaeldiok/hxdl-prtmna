@@ -24,7 +24,7 @@
       @else
         <div class="col-md-6 col-sm-6 mt-2">
             <div class="media block-6">
-              <div class="icon text-warning"><span class="ion-ios-bulb"></span></div>
+              <div class="icon text-blue"><span class="fas fa-truck"></span></div>
               <div class="media-body">
                 <h3 class="heading">AMT</h3>
                 <p>Daftar OPTRIM AMT</p>
@@ -36,7 +36,7 @@
 
         <div class="col-md-6 col-sm-6 mt-2">
           <div class="media block-6">
-          <div class="icon text-warning"><span class="ion-ios-bulb"></span></div>
+          <div class="icon text-blue"><span class="fas fa-user-tie"></span></div>
             <div class="media-body">
               <h3 class="heading">Pengawas | HSSE</h3>
               <p>Login untuk pengawas dan HSSE</p>

@@ -10,10 +10,10 @@ a {
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
   transition: .3s all ease;
-  color: #8b187e; }
+  color: #007bff; }
   a:hover {
     text-decoration: none;
-    color: #8b187e; }
+    color: #007bff; }
   a.link-underline {
     text-decoration: underline; }
     a.link-underline:hover {
@@ -652,6 +652,9 @@ textarea.form-control {
   
 .text-bright-yellow {
   color: #fdd33d !important; }
+
+.text-blue {
+  color: #002fff  !important; }
 
 .text-solid-yellow {
   color: #ffd000 !important; }
@@ -2163,3 +2166,34 @@ html:not([dir="rtl"]) .c-avatar-status {
   color: rgb(0, 0, 0);
   border: 1px solid #a8a8a8;
 }
+
+.bg-theme-red{
+  background-color: #99000f;
+}
+
+.bg-theme-dark-red{
+  background-color: #790000;
+}
+
+.bg-theme-blue{
+  background-color: #001c99;
+}
+
+.btn.btn-blue {
+  background: #001c99;
+  border: 2px solid #001c99;
+  color: #fff; }
+  .btn.btn-blue:hover {
+    border: 2px solid #001c99;
+    background: transparent;
+    color: #001c99; }
+  .btn.btn-blue:active, .btn.btn-blue:focus {
+    color: #fff !important; }
+  .btn-outline-blue {
+    border: 2px solid #001c99;
+    background: transparent;
+    color: #001c99; }
+    .btn-outline-blue:hover {
+      border: 2px solid transparent;
+      background: #001c99;
+      color: #000; }

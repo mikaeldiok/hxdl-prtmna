@@ -1,8 +1,10 @@
 
-<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-dark" id="ftco-navbar">
+<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-theme-red ftco-navbar-dark" id="ftco-navbar">
   <div class="container">
-    <img src="{{asset("img/Pertamina.png")}}" alt="logo" class="img-fluid"style="max-width: 50px; height: auto;">
-    <a class="navbar-brand ml-3" href="/">OPTRIM</a>
+    <div>
+      <img src="{{asset("img/Pertamina.png")}}" alt="logo" class="img-fluid"style="max-width: 50px; height: auto;">
+      <a class="navbar-brand ml-3" href="/">OPTRIM</a>
+    </div>
     <div class="collapse navbar-collapse" id="ftco-nav">
       <ul class="navbar-nav ml-auto">
         @if(Auth::check())
