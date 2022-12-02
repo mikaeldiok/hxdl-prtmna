@@ -22,6 +22,7 @@
                 <div class="small text-muted">
                     @lang(":module_name Management Dashboard", ['module_name'=>Str::title($module_name)])
                 </div>
+                <!-- <a href="{{route('backend.inspections.downloadDetail',$$module_name_singular->id)}}"> download</a> -->
             </div>
         </div>
         <!--/.row-->

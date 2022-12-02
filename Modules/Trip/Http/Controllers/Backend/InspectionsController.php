@@ -2,6 +2,7 @@
 
 namespace Modules\Trip\Http\Controllers\Backend;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Authorizable;
 use App\Http\Controllers\Controller;
 use Auth;
@@ -222,6 +223,36 @@ class InspectionsController extends Controller
             "trip::backend.$module_name.show-hsse",
             compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "$module_name_singular",'activities','driver','tanker',"fm")
         );
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function downloadDetail($id)
+    {
+        $module_title = $this->module_title;
+        $module_name = $this->module_name;
+        $module_path = $this->module_path;
+        $module_icon = $this->module_icon;
+        $module_model = $this->module_model;
+        $module_name_singular = Str::singular($module_name);
+
+        $module_action = 'Show';
+
+        $response = $this->inspectionService->show($id);
+
+        $inspection = $response->data;
+        $tanker = $response->data->tanker;
+        $fm = $response->fm;
+        $pdf = Pdf::loadView(
+            "trip::backend.$module_name.export-detail",
+            compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "inspection",'tanker',"fm")
+        );
+        return $pdf->download('invoice.pdf');
     }
 
     /**
