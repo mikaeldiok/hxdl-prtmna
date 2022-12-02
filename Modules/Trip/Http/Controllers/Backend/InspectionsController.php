@@ -465,4 +465,27 @@ class InspectionsController extends Controller
 
         return response()->json($response);
     }
+
+    public function sendInspectionReport(Request $request)
+    {
+
+        $module_title = $this->module_title;
+        $module_name = $this->module_name;
+        $module_path = $this->module_path;
+        $module_icon = $this->module_icon;
+        $module_model = $this->module_model;
+        $module_name_singular = Str::singular($module_name);
+
+        $module_action = 'List';
+
+        $data = $this->inspectionService->prepareReportInspection($request->input('date'));
+
+        $emails = explode(',',setting('manager_email'));
+
+        foreach($emails as $email){
+            \Mail::to(trim($email))->send(new \Modules\Trip\Emails\ReportMail($data));
+        }
+   
+        return "Email Terkirim";
+    }
 }

@@ -7,7 +7,10 @@
         <div class="row">
             <div class="col-6">
                 <div class="form-group">
-                    @if($fm && ($inspection->verify_evidence != true))
+                    @if($inspection->verify_by_pengawas != true)
+                        {{ html()->button($text = "<i class='fas fa-plus-circle'></i> Approve Gate In" , $type = 'button')->class('btn btn-secondary')->attribute('disabled') }}
+                        <small class="text-danger">Belum ada approval dari pengawas</small>
+                    @elseif($fm && ($inspection->verify_evidence != true))
                         {{ html()->button($text = "<i class='fas fa-plus-circle'></i> Approve Gate In" , $type = 'button')->class('btn btn-secondary')->attribute('disabled') }}
                         <small class="text-danger">Ada persayaratan mandatory yang belum terpenuhi</small>
                     @else

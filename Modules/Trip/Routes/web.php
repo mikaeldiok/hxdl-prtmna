@@ -93,6 +93,7 @@ Route::group(['namespace' => '\Modules\Trip\Http\Controllers\Backend', 'as' => '
     Route::post("$module_name/get_inspection", ['as' => "$module_name.getinspection", 'uses' => "$controller_name@get_inspection"]);
     Route::post("$module_name/import", ['as' => "$module_name.import", 'uses' => "$controller_name@import"]);  
     Route::get("$module_name/show-hsse/{id}", ['as' => "$module_name.show-hsse", 'uses' => "$controller_name@showHsse"]);
+    Route::post("$module_name/sendInspectionReport", ['as' => "$module_name.sendInspectionReport", 'uses' => "$controller_name@sendInspectionReport"]);
     Route::resource("$module_name", "$controller_name");
 
     $module_name = 'days';

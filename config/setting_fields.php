@@ -51,6 +51,15 @@ return [
                 'class' => '', // any class for input
                 'value' => 'info@example.com', // default value if you want
             ],
+            [
+                'type'  => 'text', // input fields type
+                'data'  => 'string', // data type, string, int, boolean
+                'name'  => 'manager_email', // unique name for field
+                'label' => 'Managers Email', // you know what label it is
+                'rules' => '', // validation rule of laravel
+                'class' => '', // any class for input
+                'value' => '', // default value if you want
+            ],
         ],
 
     ],

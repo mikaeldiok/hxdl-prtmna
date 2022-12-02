@@ -169,6 +169,27 @@ class InspectionService{
         );
     }
 
+    public function prepareReportInspection($date){
+        if($date){
+            $inspections =Inspection::whereHas('day', function($query) use ($date){
+                            $query->where('date', 'LIKE', "%".$date."%");
+                        })->get();
+        }else{
+            $inspections =Inspection::all();
+        }
+        $count = $inspections->count();
+
+        $true_date = Carbon::parse($date);
+        $true_date->settings(['formatFunction' => 'translatedFormat']); 
+
+        return (object) array(
+            'error'=> false,
+            'date' => $true_date->format('l, j F Y'),            
+            'count'=> $count,
+            'inspections'=> $inspections,
+        );
+    }
+
     public function checkInspection($id){
 
         $inspection =Inspection::where('tanker_id',$id)->latest()->first();

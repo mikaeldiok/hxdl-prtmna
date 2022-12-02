@@ -12,23 +12,33 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="col-8">
+            <div class="col-6">
                 <h4 class="card-title mb-0">
                     <i class="{{ $module_icon }}"></i> {{ $module_title }} {{request()->get('date') ? "at ".convert_basic_to_slash_date(request()->get('date')) : ''}} <small class="text-muted">{{ __($module_action) }}</small>
                 </h4>
+
             </div>
             <!--/.col-->
-            <div class="col-4">
+            <div class="col-6">
+                <div class="float-right">
+
+                @if(Auth::user()->hasRole("hsse") || Auth::user()->hasRole("super admin"))
+                    <button type="button" class="btn btn-outline-primary" id="send-report" name="send-report">
+                        
+                        <div class="spinner-border spinner-border-sm" id="spinner-send-report" role="status" style="display:none;">
+                        </div>
+                        Send Report  <i class="fa fa-envelope"></i>
+
+                    </button>
+                @endif
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pickDateModal">
                     Choose Date  <i class="fa fa-calendar ml-2"></i>
                 </button>
-
-                <div class="float-right">
                     @can('add_'.$module_name)
-                        <x-buttons.create route='{{ route("backend.$module_name.create") }}' title="{{__('Create')}} {{ ucwords(Str::singular($module_name)) }}"/>
+                        <!-- <x-buttons.create route='{{ route("backend.$module_name.create") }}' title="{{__('Create')}} {{ ucwords(Str::singular($module_name)) }}"/> -->
                     @endcan
 
-                    <div class="btn-group" role="group" aria-label="Toolbar button groups">
+                    <!-- <div class="btn-group" role="group" aria-label="Toolbar button groups">
                         <div class="btn-group" role="group">
                             <button id="btnGroupToolbar" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-cog"></i>
@@ -41,7 +51,7 @@
                                 @endcan
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <!--/.col-->
@@ -156,6 +166,44 @@ $('#date').on("change.datetimepicker", function(e){
     var theDate = $("#date").datetimepicker('viewDate').format("YYYY-MM-DD");
     $("#searcher").attr('href', '{{route("backend.inspections.index")}}'+'?date='+theDate);
 });
+    $(document).ready(function(){
+        $('#send-report').on('click', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: "@lang('Mengirim Laporan')",
+                text: "@lang('Apakah anda yakin ingin mengirimkan laporan inspeksi?')",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "@lang('Kirim')",
+                closeOnConfirm: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#spinner-send-report').show();
+                    $.ajax({
+                        type: "POST",
+                        url: '{{route("backend.$module_name.sendInspectionReport")}}',
+                        data: {
+                            "_method":"POST",
+                            "_token": "{{ csrf_token() }}",
+                            "date": "{{request()->get('date')}}"
+                        },
+                        success: function () {
+                            $('#spinner-send-report').hide();
+                            Swal.fire({
+                                icon: 'success',
+                                title: "@lang('Email Terkirim')",
+                                showConfirmButton: false,
+                                timer: 1000
+                            });
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            Swal.fire("@lang('Gagal Mengirim Report')", "@lang('error')", "error");
+                        }
+                    });
+                }
+            });
+        });
+    });
 
 </script>
 @endpush
