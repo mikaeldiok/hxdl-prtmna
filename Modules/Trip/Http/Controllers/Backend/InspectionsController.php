@@ -248,7 +248,8 @@ class InspectionsController extends Controller
         $inspection = $response->data;
         $tanker = $response->data->tanker;
         $fm = $response->fm;
-        $pdf = Pdf::loadView(
+        $pdf = new Pdf;
+        $pdf = $pdf->loadView(
             "trip::backend.$module_name.export-detail",
             compact('module_title', 'module_name', 'module_icon', 'module_name_singular', 'module_action', "inspection",'tanker',"fm")
         );
