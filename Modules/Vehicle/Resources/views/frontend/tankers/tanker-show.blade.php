@@ -2,7 +2,9 @@
 <div class="row">
     <div class="col-lg-4 col-md-6">
         <div class="form-group">
-            {{ html()->label("Status") }}: <span id="status" class=p-2>-</span>
+            {{ html()->label("Status") }}: <span id="status" class=p-2>
+                <div class="spinner-border spinner-border-sm" id="spinner-tanker">
+            </span>
         </div>
     </div>
 </div>
