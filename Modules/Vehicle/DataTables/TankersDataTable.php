@@ -130,7 +130,7 @@ class TankersDataTable extends DataTable
                     'paging' => true,
                     'searching' => true,
                     'info' => true,
-                    'responsive' => true,
+                    'responsive' => false,
                     'autoWidth' => false,
                     'searchDelay' => 350,
                 ]);
