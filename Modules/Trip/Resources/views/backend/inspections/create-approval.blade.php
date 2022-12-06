@@ -6,14 +6,17 @@
 
         <div class="row">
             <div class="col-6">
-                <div class="form-group">
+                @if($inspection->verify_by_pengawas == true)
+                    {{ html()->button($text = "<i class='fas fa-plus-circle'></i> Approve" , $type = 'button')->class('btn btn-secondary')->attribute('disabled') }}
+                    <small class="text-success">Approved</small>
+                @else
                     {{ html()->button($text = "<i class='fas fa-plus-circle'></i> Approve" , $type = 'submit')->class('btn btn-success') }}
-                </div>
+                @endif
             </div>
             <div class="col-6">
                 <div class="float-right">
                     <div class="form-group">
-                        <button type="button" class="btn btn-warning" onclick="history.back(-1)"><i class="fas fa-reply"></i> Cancel</button>
+                        <button type="button" class="btn btn-warning" onclick="history.back(-1)"><i class="fas fa-reply"></i> Bacnk</button>
                     </div>
                 </div>
             </div>
