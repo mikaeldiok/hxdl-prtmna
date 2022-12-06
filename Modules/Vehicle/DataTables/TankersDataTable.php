@@ -47,6 +47,42 @@ class TankersDataTable extends DataTable
                     return $data->updated_at->isoFormat('LLLL');
                 }
             })
+            ->editColumn('tahun_registrasi', function ($data) {
+
+                $formated_date = Carbon::parse($data->tahun_registrasi)->format('d-m-Y');
+
+                return $formated_date;
+            })
+            ->editColumn('exp_stnk', function ($data) {
+
+                $formated_date = Carbon::parse($data->exp_stnk)->format('d-m-Y');
+
+                return $formated_date;
+            })
+            ->editColumn('exp_keur', function ($data) {
+
+                $formated_date = Carbon::parse($data->exp_keur)->format('d-m-Y');
+
+                return $formated_date;
+            })
+            ->editColumn('exp_tera', function ($data) {
+
+                $formated_date = Carbon::parse($data->exp_tera)->format('d-m-Y');
+
+                return $formated_date;
+            })
+            ->editColumn('exp_kip', function ($data) {
+
+                $formated_date = Carbon::parse($data->exp_kip)->format('d-m-Y');
+
+                return $formated_date;
+            })
+            ->editColumn('end_date_mt', function ($data) {
+
+                $formated_date = Carbon::parse($data->end_date_mt)->format('d-m-Y');
+
+                return $formated_date;
+            })
             ->editColumn('created_at', function ($data) {
                 $module_name = $this->module_name;
 

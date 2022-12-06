@@ -80,7 +80,7 @@ class InspectionsDataTable extends DataTable
             })
             ->editColumn('day.date', function ($data) {
 
-                $formated_date = Carbon::parse($data->day->date)->format('d/m/Y');
+                $formated_date = Carbon::parse($data->day->date)->format('d-m-Y');
 
                 return $formated_date;
             })
