@@ -389,13 +389,6 @@ return [
         "code"		=> "B9",
         "name"		=> "Membawa Buku Saku Service Excellent AMT",
         "mandatory"	=> true,
-    ],
-    [
-        "section"	=> "Perlengkapan AMT",
-        "no"		=> 10,
-        "code"		=> "B10",
-        "name"		=> "Membawa Catatan Perjalanan AMT",
-        "mandatory"	=> true,
     ]
 ];
 
