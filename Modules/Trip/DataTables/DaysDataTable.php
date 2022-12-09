@@ -110,6 +110,8 @@ class DaysDataTable extends DataTable
             Column::make('date')->title("Tanggal"),
             Column::make('pengawas')->title("Pengawas"),
             Column::make('hsse')->title("HSSE"),
+            Column::make('korlap')->title("Korlap"),
+            Column::make('mekanik')->title("Mekanik"),
 
             Column::make('created_at')->hidden(),
             Column::make('updated_at')->hidden(),
